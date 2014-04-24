@@ -4,7 +4,8 @@
   "description": "A simple template project to quickly get up and running with Phaser.",
   "main": "deploay/index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"deploy: "./deploy-ghpages.sh"
   },
   "repository": "http://github.com/gamecook/phaser-template",
   "author": "Jesse Freeman",
