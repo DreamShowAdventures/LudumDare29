@@ -11,7 +11,6 @@ grunt
 # Commit, push changes
 cd deploy
 git init
-#git remote add origin https://github.com/DreamShowAdventures/LudumDare29.git
 git add .
 git commit -m "Build successful, build $TRAVIS_BUILD_NUMBER pushed to gh-pages"
-git push -q https://github.com/DreamShowAdventures/LudumDare29.git gh-pages
+git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
