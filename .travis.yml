@@ -5,4 +5,4 @@ script: npm run-script deploy
 env:
  global:
  - GH_REF: https://github.com/DreamShowAdventures/LudumDare29
- - secure: K8Mma/RJQu/X+DSfzCRZzkT4zFP9UHR9kFdVQW367ZqUXVSZE0a2QIQh9PNvdTiQyaKW16iAPybuMCplTif8P1lStcszhHxLqnV1KV7gXqdp9jLtuUztNs6c8EAePEXNpBXD1sb1Pj+lLr2L7kaCVecESIGQHXSD0TCAZK3wmdU=
+ - secure: "K8Mma/RJQu/X+DSfzCRZzkT4zFP9UHR9kFdVQW367ZqUXVSZE0a2QIQh9PNvdTiQyaKW16iAPybuMCplTif8P1lStcszhHxLqnV1KV7gXqdp9jLtuUztNs6c8EAePEXNpBXD1sb1Pj+lLr2L7kaCVecESIGQHXSD0TCAZK3wmdU="
