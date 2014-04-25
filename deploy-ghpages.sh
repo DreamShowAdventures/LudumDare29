@@ -1,5 +1,4 @@
-# Configure git, clone repo
-cd $HOME
+# Configure git
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "travis"
 
