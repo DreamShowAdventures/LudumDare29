@@ -17,6 +17,8 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-connect": "~0.6.0",
     "node-gyp": "^0.13.0",
-    "ursa": "^0.8.0"
+    "ursa": "^0.8.0",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-contrib-copy": "^0.5.0"
   }
 }

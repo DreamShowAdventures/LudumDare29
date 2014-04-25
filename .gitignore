@@ -8,3 +8,4 @@ obj/*
 *.suo
 .idea/*
 *.log
+deploy/*
