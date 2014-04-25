@@ -8,3 +8,9 @@ env:
  - secure: 'dOAUt+OvqOgJcu/keRFuNiSQQ+pG+1wv9Rs1LEfJUMAvNxOQqCE2ndHcZgDjJ5bw9Ten5Ct7r7pji+01
 vdHKAF8NKdh7VSGZonLcQHX5qVzRiJToFyut+fhz7mC60FKXlJ/xSO1NmcktRnc3WZjQUPZo161Tkxrn
 leFk05QElCk='
+notifications:
+  email:
+    recipients:
+      - stevenpatrickrichey@gmail.com
+    on_success: [always|never|change] # default: change
+    on_failure: [always|never|change] # default: change

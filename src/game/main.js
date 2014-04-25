@@ -1,24 +1,12 @@
-/**
- *
- * This is a simple state template to use for getting a Phaser game up
- * and running quickly. Simply add your own game logic to the default
- * state object or delete it and make your own.
- *
- */
-
-var state = {
+var menuState = {
     init: function() {
-        // Delete this init block or replace with your own logic.
-
-        // Create simple text display for current Phaser version
-        var text = "Phaser Version "+Phaser.VERSION + " works!";
+        var text = "Phaser Version "+Phaser.VERSION + " works!\nDream Show Adventures w00t!";
         var style = { font: "24px Arial", fill: "#fff", align: "center" };
         var t = game.add.text(this.world.centerX, this.world.centerY, text, style);
         t.anchor.setTo(0.5, 0.5);
-
     },
     preload: function() {
-        // STate preload logic goes here
+        // State preload logic goes here
     },
     create: function(){
       // State create logic goes here
@@ -28,10 +16,4 @@ var state = {
     }
 };
 
-var game = new Phaser.Game(
-    800,
-    480,
-    Phaser.AUTO,
-    'game',
-    state
-);
+var game = new Phaser.Game(800, 480, Phaser.AUTO, 'game', menuState);
