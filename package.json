@@ -1,15 +1,15 @@
 {
-  "name": "game",
-  "version": "2.0.0",
-  "description": "A simple template project to quickly get up and running with Phaser.",
-  "main": "deploay/index.html",
+  "name": "LudumDare29",
+  "version": "0.1.0",
+  "description": "The Dream Show Adventures team submission for LD29.",
+  "main": "deploy/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "./deploy-ghpages.sh"
   },
-  "repository": "http://github.com/gamecook/phaser-template",
-  "author": "Jesse Freeman",
-  "license": "MIT",
+  "repository": "http://github.com/DreamShowAdventures/LudumDare29",
+  "author": "Dream Show Adventures",
+  "license": "(c) 2014 Dream Show Adventures",
   "devDependencies": {
     "grunt-open": "~0.2.3",
     "grunt": "~0.4.2",
