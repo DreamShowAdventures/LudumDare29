@@ -1,12 +1,11 @@
-#!/bin/bash
-rm -rf out || exit 0;
-mkdir out; 
-node build.js
-( cd out
- git init
- git config user.name "Travis-CI"
- git config user.email "travis@dreamshowadventures.com"
- git add .
- git commit -m "Deployed to Github Pages via Travis"
- git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
-)
+# Configure git, clone repo
+cd $HOME
+git config --global user.email "travis@travis-ci.org"
+git config --global user.name "travis"
+git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/DreamShowAdventures/LudumDare29 gh-pages > /dev/null
+
+# Commit, push changes
+cd gh-pages
+git add .
+git commit -m "Build successful, build $TRAVIS_BUILD_NUMBER pushed to gh-pages
+git push -fq origin gh-pages > /dev/null
