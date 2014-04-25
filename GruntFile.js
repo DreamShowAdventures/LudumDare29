@@ -33,6 +33,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('default', ['concat', 'connect', 'open', 'watch']);
+    grunt.registerTask('default', ['concat']);
+    grunt.registerTask('open-watch', ['concat', 'connect', 'open', 'watch']);
 
 }
