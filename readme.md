@@ -1,4 +1,4 @@
-LudumDare29
+LudumDare29 [![Build Status](https://travis-ci.org/DreamShowAdventures/LudumDare29.png)](https://travis-ci.org/DreamShowAdventures/LudumDare29)
 ===========
 
 The Dream Show Adventures team submission for LD29. Play it [here](http://DreamShowAdventures.github.io/LudumDare29/).
