@@ -2,6 +2,9 @@
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "travis"
 
+# Configure grunt
+npm install -g grunt-cli
+
 # Build to deploy folder
 grunt
 
