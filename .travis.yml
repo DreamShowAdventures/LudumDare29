@@ -1,10 +1,10 @@
 language: node_js
 node_js:
 - '0.10'
-script: npm run-script deploy
+script: 'npm run deploy'
 env:
  global:
- - GH_REF: github.com/DreamShowAdventures/LudumDare29
- - secure: "dOAUt+OvqOgJcu/keRFuNiSQQ+pG+1wv9Rs1LEfJUMAvNxOQqCE2ndHcZgDjJ5bw9Ten5Ct7r7pji+01
+ - GH_REF: 'github.com/DreamShowAdventures/LudumDare29'
+ - secure: 'dOAUt+OvqOgJcu/keRFuNiSQQ+pG+1wv9Rs1LEfJUMAvNxOQqCE2ndHcZgDjJ5bw9Ten5Ct7r7pji+01
 vdHKAF8NKdh7VSGZonLcQHX5qVzRiJToFyut+fhz7mC60FKXlJ/xSO1NmcktRnc3WZjQUPZo161Tkxrn
-leFk05QElCk="
+leFk05QElCk='
