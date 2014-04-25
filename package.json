@@ -5,7 +5,7 @@
   "main": "deploy/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "./deploy-ghpages.sh"
+    "deploy": "deploy-ghpages.sh"
   },
   "repository": "http://github.com/DreamShowAdventures/LudumDare29",
   "author": "Dream Show Adventures",
