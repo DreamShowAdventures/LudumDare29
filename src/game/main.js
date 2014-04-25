@@ -1,6 +1,6 @@
 var menuState = {
     init: function() {
-        var text = "Phaser Version "+Phaser.VERSION + " works!\nDream Show Adventures w00t!";
+        var text = "Phaser Version 2.0.3 works!\nDream Show Adventures w00t!";
         var style = { font: "24px Arial", fill: "#fff", align: "center" };
         var t = game.add.text(this.world.centerX, this.world.centerY, text, style);
         t.anchor.setTo(0.5, 0.5);
@@ -16,4 +16,4 @@ var menuState = {
     }
 };
 
-var game = new Phaser.Game(800, 480, Phaser.AUTO, 'game', menuState);
+var game = new Phaser.Game(640, 480, Phaser.AUTO, 'game', menuState);
