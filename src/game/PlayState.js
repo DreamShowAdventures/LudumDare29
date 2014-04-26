@@ -18,30 +18,17 @@ var playState = {
 		// initialize physics
 		game.physics.startSystem(Phaser.Physics.Arcade);
 		
+		// configure scaling
 		game.stage.backgroundColor = '#333';
+		game.scale.width = gameWidth / zoom;
+		game.scale.height = gameHeight / zoom;
+		game.scale.refresh();
 		
-		// prevent blurry pixels
-		game.stage.smoothed = false;
+		// create the player
 		
-		// scale the stage for pixelly goodness
-		game.stage.width = 150;
-		game.stage.height = 300;
-		
-		// set up the player
-		
-		bunny = game.add.sprite(10, 10, 'bunny');
-		game.physics.enable(bunny, Phaser.Physics.Arcade);
-		
-		leftButton = game.input.keyboard.addKey(Phaser.Keyboard.Left);
-		rightButton = game.input.keyboard.addKey(Phaser.Keyboard.Right);
+		bunny = new Bunny(game);
 	},
 	update: function() {
-		if (leftButton.isDown) {
-			bunny.body.acceleration.x = -10;
-		}
 		
-		if (rightButton.isDown) {
-			bunny.body.acceleration.x = 10;
-		}
 	}
 };

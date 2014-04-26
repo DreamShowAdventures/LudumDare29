@@ -73609,13 +73609,51 @@ Phaser.Physics.P2.RevoluteConstraint.prototype = Object.create(p2.RevoluteConstr
 Phaser.Physics.P2.RevoluteConstraint.prototype.constructor = Phaser.Physics.P2.RevoluteConstraint;
 
 /*global Phaser*/
+/*global game*/
+
+/**
+ * @author Steve Richey http://www.steverichey.com @stvr_tweets
+ */
+
+Bunny = function (game) {
+	var x = 10;
+	var y = 10;
+	
+	game.physics.enable(this, Phaser.Physics.Arcade);
+	game.add.sprite(10, 10, 'bunny')
+	
+	var leftButton = game.input.keyboard.addKey(Phaser.Keyboard.Left);
+	var rightButton = game.input.keyboard.addKey(Phaser.Keyboard.Right);
+};
+
+Bunny.prototype.update = function() {
+	this.body.velocity.x = 0;
+	
+	if (leftButton.isDown) {
+		this.body.velocity.x = -50;
+	}
+	
+	if (rightButton.isDown) {
+		this.body.velocity.x = 50;
+	}
+};
+/*global Phaser*/
 /*global menuState*/
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
  */
 
-var game = new Phaser.Game(300, 600, Phaser.AUTO, 'game', playState);
+var gameWidth = 300;
+var gameHeight = 600;
+var zoom = 2;
+
+var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'game', playState, false, false);
+
+game.stage.backgroundColor = '#333';
+game.scale.width = gameWidth / zoom;
+game.scale.height = gameHeight / zoom;
+game.scale.refresh();
 /*global Phaser*/
 /*global game*/
 
@@ -73660,23 +73698,11 @@ var playState = {
 		// initialize physics
 		game.physics.startSystem(Phaser.Physics.Arcade);
 		
-		game.stage.backgroundColor = '#333';
+		// create the player
 		
-		// set up the player
-		
-		bunny = game.add.sprite(200, 200, 'bunny');
-		game.physics.enable(bunny, Phaser.Physics.Arcade);
-		
-		leftButton = game.input.keyboard.addKey(Phaser.Keyboard.Left);
-		rightButton = game.input.keyboard.addKey(Phaser.Keyboard.Right);
+		bunny = new Bunny(game);
 	},
 	update: function() {
-		if (leftButton.isDown) {
-			bunny.body.acceleration.x = -10;
-		}
 		
-		if (rightButton.isDown) {
-			bunny.body.acceleration.x = 10;
-		}
 	}
 };
