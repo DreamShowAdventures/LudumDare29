@@ -25,7 +25,7 @@ Bunny.prototype.update = function() {
 		this.body.velocity.x = -50;
 	}
 	
-	if (cursors.left.isDown) {
+	if (cursors.right.isDown) {
 		this.body.velocity.x = 50;
 	}
 };
