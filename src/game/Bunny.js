@@ -21,13 +21,13 @@ Bunny.prototype = Object.create(Phaser.Sprite.prototype);
 Bunny.prototype.constructor = Bunny;
 
 Bunny.prototype.update = function() {
-	this.bunny.body.velocity.x = 0;
+	this.body.velocity.x = 0;
 	
 	if (this.cursors.left.isDown) {
-		this.bunny.body.velocity.x = -50;
+		this.body.velocity.x = -50;
 	}
 	
 	if (this.cursors.right.isDown) {
-		this.bunny.body.velocity.x = 50;
+		this.body.velocity.x = 50;
 	}
 };
