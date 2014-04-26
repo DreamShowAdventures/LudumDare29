@@ -9,8 +9,10 @@ Bunny = function (game) {
 	var x = 10;
 	var y = 10;
 	
-	game.physics.enable(this, Phaser.Physics.Arcade);
-	this.bunny = game.add.sprite(10, 10, 'bunny')
+	this.bunny = game.add.sprite(10, 10, 'bunny');
+	game.physics.enable(this.bunny, Phaser.Physics.Arcade);
+	this.bunny.body.collideWorldBounds = true;
+	this.bunny.body.setSize(32, 32, 0, 0);
 	
 	this.cursors = game.input.keyboard.createCursorKeys();
 	//jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
