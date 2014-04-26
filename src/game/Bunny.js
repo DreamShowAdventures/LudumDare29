@@ -16,6 +16,7 @@ Bunny = function (game) {
 	
 	cursors = game.input.keyboard.createCursorKeys();
 	//jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	this.update.bind(this);
 };
 
 Bunny.prototype.update = function() {
