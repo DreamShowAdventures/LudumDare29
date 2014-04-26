@@ -12,18 +12,18 @@ Bunny = function (game) {
 	game.physics.enable(this, Phaser.Physics.Arcade);
 	game.add.sprite(10, 10, 'bunny')
 	
-	var leftButton = game.input.keyboard.addKey(Phaser.Keyboard.Left);
-	var rightButton = game.input.keyboard.addKey(Phaser.Keyboard.Right);
+	var cursors = game.input.keyboard.createCursorKeys();
+	//jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 };
 
 Bunny.prototype.update = function() {
 	this.body.velocity.x = 0;
 	
-	if (leftButton.isDown) {
+	if (cursors.left.isDown) {
 		this.body.velocity.x = -50;
 	}
 	
-	if (rightButton.isDown) {
+	if (cursors.left.isDown) {
 		this.body.velocity.x = 50;
 	}
 };
