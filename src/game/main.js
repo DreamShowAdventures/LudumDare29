@@ -9,4 +9,4 @@ var gameWidth = 150;
 var gameHeight = 300;
 var zoom = 2;
 
-var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'game', playState, false, false);
+var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'game', playState, false, false);
