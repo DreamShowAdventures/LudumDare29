@@ -5,14 +5,13 @@
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
  */
 
-var bunny;
-
 var playState = {
 	init: function() {
 		
 	},
 	preload: function() {
 		game.load.image('bunny', 'assets/bunny.png');
+		game.load.image('bg', 'assets/bg.png');
 	},
 	create: function(){
 		// initialize physics
@@ -36,9 +35,13 @@ var playState = {
 		
 		// create the player
 		
-		bunny = new Bunny(game);
+		this.bunny = new Bunny(game);
+		
+		// create the background
+		
+		this.background = this.game.add.sprite(0, 0, 'bg');
 	},
 	update: function() {
-		bunny.update();
+		this.bunny.update();
 	}
 };
