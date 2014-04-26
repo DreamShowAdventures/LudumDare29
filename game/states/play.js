@@ -1,5 +1,7 @@
 'use strict';
 
+var Bunny = require('../prefabs/bunny');
+
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
  */
@@ -48,9 +50,10 @@ Play.prototype = {
 		//}
 		
 		// create the player
-		
-		this.bunny = new Bunny(this.game, 10, 10);
-		this.game.add.existing(this.bunny);**/
+		**/
+		this.bunny = new Bunny(this.game, 32, 32);
+		this.game.add.existing(this.bunny);
+		//this.bunny = this.game.add.sprite(0, 0, 'bunny');
 	},
 	update: function() {
 		// hi

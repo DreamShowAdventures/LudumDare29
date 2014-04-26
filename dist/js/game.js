@@ -15,7 +15,46 @@ window.onload = function () {
 
   game.state.start('boot');
 };
-},{"./states/boot":2,"./states/gameover":3,"./states/menu":4,"./states/play":5,"./states/preload":6}],2:[function(require,module,exports){
+},{"./states/boot":3,"./states/gameover":4,"./states/menu":5,"./states/play":6,"./states/preload":7}],2:[function(require,module,exports){
+'use strict';
+
+var Bunny = function(game, x, y, frame) {
+	Phaser.Sprite.call(this, game, x, y, 'bunny', frame);
+	// scale up!
+	this.smoothed = false;
+	this.scale.x = 2;
+	this.scale.y = 2;
+	// center rotations
+	this.anchor.setTo(0.5, 0.5);
+	// enable physics
+	this.game.physics.arcade.enableBody(this);
+	// collide with world bounds
+	this.body.collideWorldBounds = true;
+	// set body size
+	this.body.setSize(16, 28, 0, 0);
+	// enable input
+	this.cursors = game.input.keyboard.createCursorKeys();
+  
+};
+
+Bunny.prototype = Object.create(Phaser.Sprite.prototype);
+Bunny.prototype.constructor = Bunny;
+
+Bunny.prototype.update = function() {
+	this.body.velocity.x = 0;
+	
+	if (this.cursors.left.isDown) {
+		this.body.velocity.x = -50;
+	}
+	
+	if (this.cursors.right.isDown) {
+		this.body.velocity.x = 50;
+	}
+};
+
+module.exports = Bunny;
+
+},{}],3:[function(require,module,exports){
 
 'use strict';
 
@@ -34,7 +73,7 @@ Boot.prototype = {
 
 module.exports = Boot;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 
 'use strict';
 function GameOver() {}
@@ -62,66 +101,90 @@ GameOver.prototype = {
 };
 module.exports = GameOver;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 
 'use strict';
 function Menu() {}
 
 Menu.prototype = {
   preload: function() {
-
+	// todo
   },
   create: function() {
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-    this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'yeoman');
-    this.sprite.anchor.setTo(0.5, 0.5);
-
-    this.titleText = this.game.add.text(this.game.world.centerX, 300, '\'Allo, \'Allo!', style);
-    this.titleText.anchor.setTo(0.5, 0.5);
-
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play "Click The Yeoman Logo"', { font: '16px Arial', fill: '#ffffff', align: 'center'});
-    this.instructionsText.anchor.setTo(0.5, 0.5);
-
-    this.sprite.angle = -20;
-    this.game.add.tween(this.sprite).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+    // todo
   },
   update: function() {
-    if(this.game.input.activePointer.justPressed()) {
-      this.game.state.start('play');
-    }
+    // todo
   }
 };
 
 module.exports = Menu;
 
-},{}],5:[function(require,module,exports){
-
-  'use strict';
-  function Play() {}
-  Play.prototype = {
-    create: function() {
-      this.game.physics.startSystem(Phaser.Physics.ARCADE);
-      this.sprite = this.game.add.sprite(this.game.width/2, this.game.height/2, 'yeoman');
-      this.sprite.inputEnabled = true;
-      
-      this.game.physics.arcade.enable(this.sprite);
-      this.sprite.body.collideWorldBounds = true;
-      this.sprite.body.bounce.setTo(1,1);
-      this.sprite.body.velocity.x = this.game.rnd.integerInRange(-500,500);
-      this.sprite.body.velocity.y = this.game.rnd.integerInRange(-500,500);
-
-      this.sprite.events.onInputDown.add(this.clickListener, this);
-    },
-    update: function() {
-
-    },
-    clickListener: function() {
-      this.game.state.start('gameover');
-    }
-  };
-  
-  module.exports = Play;
 },{}],6:[function(require,module,exports){
+'use strict';
+
+var Bunny = require('../prefabs/bunny');
+
+/**
+ * @author Steve Richey http://www.steverichey.com @stvr_tweets
+ */
+ 
+function Play() {}
+
+Play.prototype = {
+	create: function() {
+		this.game.physics.startSystem(Phaser.Physics.ARCADE);
+		//this.sprite = this.game.add.sprite(this.game.width/2, this.game.height/2, 'yeoman');
+		//this.sprite.inputEnabled = true;
+		//
+		//this.game.physics.arcade.enable(this.sprite);
+		//this.sprite.body.collideWorldBounds = true;
+		//this.sprite.body.bounce.setTo(1,1);
+		//this.sprite.body.velocity.x = this.game.rnd.integerInRange(-500,500);
+		//this.sprite.body.velocity.y = this.game.rnd.integerInRange(-500,500);
+		
+		//this.sprite.events.onInputDown.add(this.clickListener, this);
+		
+		// configure scaling
+		this.game.stage.backgroundColor = '#080';
+		/**
+		if (this.game.context) {
+			this.game.renderer.setSmoothingEnabled(game.context, false);
+		} else {
+			this.game.renderer.options.antialias = false;
+		}
+		
+		this.game.antialias = false;
+		this.game.stage.smoothed = false;
+		//game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+		this.game.scale.width = gameWidth * zoom;
+		this.game.scale.height = gameHeight * zoom;
+		this.game.scale.refresh();
+		
+		// create the chunks
+		
+		this.chunks = this.game.add.group();
+		//this.chunks.add(new Chunk(this.game, this));
+		
+		//for(var i = 0; i < 3; i++)
+		//{
+			this.chunks.add(new Chunk(this.game, this.chunks));
+			//this.chunks.add(new Chunk(this.game,)
+		//}
+		
+		// create the player
+		**/
+		this.bunny = new Bunny(this.game, 32, 32);
+		this.game.add.existing(this.bunny);
+		//this.bunny = this.game.add.sprite(0, 0, 'bunny');
+	},
+	update: function() {
+		// hi
+	}
+};
+
+module.exports = Play;
+},{"../prefabs/bunny":2}],7:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -137,6 +200,8 @@ Preload.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     this.load.image('yeoman', 'assets/yeoman-logo.png');
+	this.load.image('bunny', 'assets/bunny.png');
+    this.load.image('dirt', 'assets/tileset_dirt.png');
 
   },
   create: function() {
@@ -144,7 +209,7 @@ Preload.prototype = {
   },
   update: function() {
     if(!!this.ready) {
-      this.game.state.start('menu');
+      this.game.state.start('play');
     }
   },
   onLoadComplete: function() {

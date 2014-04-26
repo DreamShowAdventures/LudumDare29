@@ -12,5 +12,5 @@ window.onload = function () {
   game.state.add('preload', require('./states/preload'));
   
 
-  game.state.start('play');
+  game.state.start('boot');
 };
