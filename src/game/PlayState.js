@@ -18,7 +18,7 @@ var playState = {
 		
 		// configure scaling
 		game.stage.backgroundColor = '#333';
-		Phaser.Canvas.setSmoothingEnabled(game.context, false);
+		game.canvas.setSmoothingEnabled(game.context, false);
 		game.antialias = false;
 		game.stage.smoothed = false;
 		game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
