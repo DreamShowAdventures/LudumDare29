@@ -5,9 +5,11 @@
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
  */
 
+var bunny;
+
 var playState = {
 	init: function() {
-		var bunny;
+		
 	},
 	preload: function() {
 		game.load.image('bunny', 'assets/bunny.png');
@@ -37,6 +39,6 @@ var playState = {
 		bunny = new Bunny(game);
 	},
 	update: function() {
-		
+		bunny.update();
 	}
 };
