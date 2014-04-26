@@ -51,8 +51,8 @@ module.exports = function (grunt) {
 				files: [
 					{expand: true, src: ['assets/*'], dest: 'deploy/'},
 					// TODO THIS IS THE RELEASE VERSION
-					//{expand: true, flatten: true, src: ['src/dev/index.html'], dest: 'deploy/'}
-					{expand: true, flatten: true, src: ['src/index.html'], dest: 'deploy/'}
+					//{expand: true, flatten: true, src: ['src/index.html'], dest: 'deploy/'}
+					{expand: true, flatten: true, src: ['src/dev/index.html'], dest: 'deploy/'}
 				]
 			}
 		}
