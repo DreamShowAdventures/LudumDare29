@@ -36,7 +36,7 @@ var playState = {
 		// create the background
 		
 		this.background = this.game.add.tileSprite(0, 0, 235, 290, 'bg');
-		this.background.autoScroll(-100, 0);
+		this.background.autoScroll(0, -100);
 		
 		// create the player
 		
