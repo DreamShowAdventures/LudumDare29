@@ -18,8 +18,13 @@ var playState = {
 		
 		// configure scaling
 		game.stage.backgroundColor = '#333';
-		//game.renderer.setSmoothingEnabled(game.context, false);
-		game.renderer.options.antialias = false;
+		
+		if (game.context) {
+			game.renderer.setSmoothingEnabled(game.context, false);
+		} else {
+			game.renderer.options.antialias = false;
+		}
+		
 		game.antialias = false;
 		game.stage.smoothed = false;
 		//game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
