@@ -16,7 +16,7 @@ var Bunny = function(game, x, y, frame) {
 	this.body.setSize(16, 28, 0, 0);
 	// enable input
 	this.cursors = game.input.keyboard.createCursorKeys();
-  
+	// test test
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
