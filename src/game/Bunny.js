@@ -11,10 +11,9 @@ var Bunny = function (game, x, y, frame) {
 	this.anchor.setTo(0.5, 0.5);
 	this.game.physics.arcade.enableBody(this);
 	this.body.collideWorldBounds = true;
-	this.body.setSize(32, 32, 0, 0);
+	this.body.setSize(16, 28, 0, 0);
 	
 	this.cursors = game.input.keyboard.createCursorKeys();
-	//jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);

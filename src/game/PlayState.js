@@ -11,7 +11,7 @@ var playState = {
 	},
 	preload: function() {
 		this.load.image('bunny', 'assets/bunny.png');
-		this.load.image('bg', 'assets/bg.png');
+		this.load.image('tileset_dirt', 'assets/tileset_dirt.png');
 	},
 	create: function(){
 		// initialize physics
@@ -33,10 +33,15 @@ var playState = {
 		this.game.scale.height = gameHeight * zoom;
 		this.game.scale.refresh();
 		
-		// create the background
+		// create the chunks
 		
-		this.background = this.game.add.tileSprite(0, 0, 235, 290, 'bg');
-		this.background.autoScroll(0, -100);
+		this.chunks = this.game.add.group();
+		this.chunks.add(new Chunk(this.game, this));
+		
+		for(var i = 0; i < 3; i++)
+		{
+			//this.chunks.add(new Chunk(this.game,)
+		}
 		
 		// create the player
 		
