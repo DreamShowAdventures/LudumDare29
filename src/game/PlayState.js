@@ -44,6 +44,6 @@ var playState = {
 		this.game.add.existing(this.bunny);
 	},
 	update: function() {
-		this.bunny.update();
+		
 	}
 };
