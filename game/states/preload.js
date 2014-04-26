@@ -14,6 +14,7 @@ Preload.prototype = {
     this.load.setPreloadSprite(this.asset);
     this.load.image('yeoman', 'assets/yeoman-logo.png');
 	this.load.image('bunny', 'assets/bunny.png');
+	this.load.spritesheet('drilling', 'assets/drilling.png', 16, 28);
     this.load.image('dirt', 'assets/tileset_dirt.png');
 
   },

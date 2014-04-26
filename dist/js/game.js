@@ -19,7 +19,7 @@ window.onload = function () {
 'use strict';
 
 var Bunny = function(game, x, y, frame) {
-	Phaser.Sprite.call(this, game, x, y, 'bunny', frame);
+	Phaser.Sprite.call(this, game, x, y, 'drilling', frame);
 	// scale up!
 	this.smoothed = false;
 	this.scale.x = 2;
@@ -36,6 +36,9 @@ var Bunny = function(game, x, y, frame) {
 	this.cursors = game.input.keyboard.createCursorKeys();
 	// wiggle wiggle
 	this.baseY = this.y;
+	// animate
+	this.animations.add('drill', [0, 1, 2], 12, true);
+	this.animations.play('drill');
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -221,6 +224,7 @@ Preload.prototype = {
     this.load.setPreloadSprite(this.asset);
     this.load.image('yeoman', 'assets/yeoman-logo.png');
 	this.load.image('bunny', 'assets/bunny.png');
+	this.load.spritesheet('drilling', 'assets/drilling.png', 16, 28);
     this.load.image('dirt', 'assets/tileset_dirt.png');
 
   },
