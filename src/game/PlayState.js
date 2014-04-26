@@ -20,8 +20,8 @@ var playState = {
 		
 		// configure scaling
 		game.stage.backgroundColor = '#333';
-		game.scale.width = gameWidth / zoom;
-		game.scale.height = gameHeight / zoom;
+		game.scale.width = gameWidth * zoom;
+		game.scale.height = gameHeight * zoom;
 		game.scale.refresh();
 		
 		// create the player
