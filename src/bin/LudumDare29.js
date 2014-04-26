@@ -73608,9 +73608,24 @@ Phaser.Physics.P2.RevoluteConstraint = function (world, bodyA, pivotA, bodyB, pi
 Phaser.Physics.P2.RevoluteConstraint.prototype = Object.create(p2.RevoluteConstraint.prototype);
 Phaser.Physics.P2.RevoluteConstraint.prototype.constructor = Phaser.Physics.P2.RevoluteConstraint;
 
+/*global Phaser*/
+/*global menuState*/
+
+/**
+ * @author Steve Richey http://www.steverichey.com @stvr_tweets
+ */
+
+var game = new Phaser.Game(300, 600, Phaser.AUTO, 'game', playState);
+/*global Phaser*/
+/*global game*/
+
+/**
+ * @author Steve Richey http://www.steverichey.com @stvr_tweets
+ */
+
 var menuState = {
     init: function() {
-        var text = "Phaser Version "+Phaser.VERSION + " works!\nDream Show Adventures w00t!";
+        var text = "We Are Drilling to the Core!";
         var style = { font: "24px Arial", fill: "#fff", align: "center" };
         var t = game.add.text(this.world.centerX, this.world.centerY, text, style);
         t.anchor.setTo(0.5, 0.5);
@@ -73622,8 +73637,46 @@ var menuState = {
       // State create logic goes here
     },
     update: function() {
-        // State Update Logic goes here.
+        
     }
 };
+/*global Phaser*/
+/*global game*/
 
-var game = new Phaser.Game(800, 480, Phaser.AUTO, 'game', menuState);
+/**
+ * @author Steve Richey http://www.steverichey.com @stvr_tweets
+ */
+
+var playState = {
+	init: function() {
+		var leftButton;
+		var rightButton;
+		var bunny;
+	},
+	preload: function() {
+		game.load.image('bunny', 'assets/bunny.png');
+	},
+	create: function(){
+		// initialize physics
+		game.physics.startSystem(Phaser.Physics.Arcade);
+		
+		game.stage.backgroundColor = '#333';
+		
+		// set up the player
+		
+		bunny = game.add.sprite(200, 200, 'bunny');
+		game.physics.enable(bunny, Phaser.Physics.Arcade);
+		
+		leftButton = game.input.keyboard.addKey(Phaser.Keyboard.Left);
+		rightButton = game.input.keyboard.addKey(Phaser.Keyboard.Right);
+	},
+	update: function() {
+		if (leftButton.isDown) {
+			bunny.body.acceleration.x = -10;
+		}
+		
+		if (rightButton.isDown) {
+			bunny.body.acceleration.x = 10;
+		}
+	}
+};
