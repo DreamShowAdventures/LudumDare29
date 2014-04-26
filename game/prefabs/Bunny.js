@@ -16,8 +16,8 @@ var Bunny = function(game, x, y, frame) {
 	this.body.setSize(16, 28, 0, 0);
 	// enable input
 	this.cursors = game.input.keyboard.createCursorKeys();
-	// test test
-	// test more
+	// wiggle wiggle
+	this.baseY = this.y;
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -27,11 +27,27 @@ Bunny.prototype.update = function() {
 	this.body.velocity.x = 0;
 	
 	if (this.cursors.left.isDown) {
-		this.body.velocity.x = -50;
+		this.body.velocity.x = -100;
 	}
 	
 	if (this.cursors.right.isDown) {
-		this.body.velocity.x = 50;
+		this.body.velocity.x = 100;
+	}
+	
+	if (this.body.velocity.x < 0 && this.angle < 22.5) {
+		this.body.angularVelocity = 200;
+	} else if (this.body.velocity.x > 0 && this.angle > -22.5) {
+		this.body.angularVelocity = -200;
+	} else {
+		this.body.angularVelocity = 0;
+	}
+	
+	// wiggle wiggle!!
+	
+	if (this.y === this.baseY) {
+		this.y = this.baseY + 2;
+	} else {
+		this.y = this.baseY;
 	}
 };
 

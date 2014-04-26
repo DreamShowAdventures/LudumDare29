@@ -57,6 +57,9 @@ Play.prototype = {
 	},
 	update: function() {
 		// hi
+	},
+	render: function() {
+		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
 	}
 };
 
