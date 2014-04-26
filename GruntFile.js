@@ -21,7 +21,8 @@ module.exports = function (grunt) {
                 src: [  "src/lib/phaser.js",
 						"src/game/*.js"
                      ],
-                dest: 'src/bin/<%= pkg.name %>.js'
+                //dest: 'src/bin/<%= pkg.name %>.js'
+				dest: 'deploy/js/LudumDare29.js'
             }
         },
         watch: {
@@ -49,6 +50,8 @@ module.exports = function (grunt) {
 			main: {
 				files: [
 					{expand: true, src: ['assets/*'], dest: 'deploy/'},
+					// TODO THIS IS THE RELEASE VERSION
+					//{expand: true, flatten: true, src: ['src/dev/index.html'], dest: 'deploy/'}
 					{expand: true, flatten: true, src: ['src/index.html'], dest: 'deploy/'}
 				]
 			}
@@ -56,6 +59,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('default', ['concat', 'uglify', 'copy']);
+    grunt.registerTask('embiggened', ['concat', 'copy']);
     grunt.registerTask('open-watch', ['concat', 'connect', 'open', 'watch']);
 
 }

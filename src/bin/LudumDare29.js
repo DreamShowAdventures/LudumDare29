@@ -73619,22 +73619,24 @@ Bunny = function (game) {
 	var x = 10;
 	var y = 10;
 	
-	game.physics.enable(this, Phaser.Physics.Arcade);
-	game.add.sprite(10, 10, 'bunny')
+	this.bunny = game.add.sprite(10, 10, 'bunny');
+	game.physics.enable(this.bunny, Phaser.Physics.Arcade);
+	this.bunny.body.collideWorldBounds = true;
+	this.bunny.body.setSize(32, 32, 0, 0);
 	
-	var leftButton = game.input.keyboard.addKey(Phaser.Keyboard.Left);
-	var rightButton = game.input.keyboard.addKey(Phaser.Keyboard.Right);
+	this.cursors = game.input.keyboard.createCursorKeys();
+	//jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 };
 
 Bunny.prototype.update = function() {
-	this.body.velocity.x = 0;
+	this.bunny.body.velocity.x = 0;
 	
-	if (leftButton.isDown) {
-		this.body.velocity.x = -50;
+	if (this.cursors.left.isDown) {
+		this.bunny.body.velocity.x = -50;
 	}
 	
-	if (rightButton.isDown) {
-		this.body.velocity.x = 50;
+	if (this.cursors.right.isDown) {
+		this.bunny.body.velocity.x = 50;
 	}
 };
 /*global Phaser*/
@@ -73644,16 +73646,11 @@ Bunny.prototype.update = function() {
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
  */
 
-var gameWidth = 300;
-var gameHeight = 600;
+var gameWidth = 150;
+var gameHeight = 300;
 var zoom = 2;
 
 var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'game', playState, false, false);
-
-game.stage.backgroundColor = '#333';
-game.scale.width = gameWidth / zoom;
-game.scale.height = gameHeight / zoom;
-game.scale.refresh();
 /*global Phaser*/
 /*global game*/
 
@@ -73685,11 +73682,11 @@ var menuState = {
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
  */
 
+var bunny;
+
 var playState = {
 	init: function() {
-		var leftButton;
-		var rightButton;
-		var bunny;
+		
 	},
 	preload: function() {
 		game.load.image('bunny', 'assets/bunny.png');
@@ -73698,11 +73695,27 @@ var playState = {
 		// initialize physics
 		game.physics.startSystem(Phaser.Physics.Arcade);
 		
+		// configure scaling
+		game.stage.backgroundColor = '#333';
+		
+		if (game.context) {
+			game.renderer.setSmoothingEnabled(game.context, false);
+		} else {
+			game.renderer.options.antialias = false;
+		}
+		
+		game.antialias = false;
+		game.stage.smoothed = false;
+		//game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+		game.scale.width = gameWidth * zoom;
+		game.scale.height = gameHeight * zoom;
+		game.scale.refresh();
+		
 		// create the player
 		
 		bunny = new Bunny(game);
 	},
 	update: function() {
-		
+		bunny.update();
 	}
 };
