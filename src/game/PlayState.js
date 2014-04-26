@@ -20,6 +20,8 @@ var playState = {
 		
 		// configure scaling
 		game.stage.backgroundColor = '#333';
+		game.antialias = false;
+		game.stage.smoothed = false;
 		game.scale.width = gameWidth * zoom;
 		game.scale.height = gameHeight * zoom;
 		game.scale.refresh();
