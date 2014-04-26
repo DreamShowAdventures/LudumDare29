@@ -10,8 +10,8 @@ var playState = {
 		
 	},
 	preload: function() {
-		this.game.load.image('bunny', 'assets/bunny.png');
-		this.game.load.image('bg', 'assets/bg.png');
+		this.load.image('bunny', 'assets/bunny.png');
+		this.load.image('bg', 'assets/bg.png');
 	},
 	create: function(){
 		// initialize physics
