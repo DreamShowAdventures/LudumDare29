@@ -20,9 +20,16 @@ var playState = {
 		
 		game.stage.backgroundColor = '#333';
 		
+		// prevent blurry pixels
+		game.stage.smoothed = false;
+		
+		// scale the stage for pixelly goodness
+		game.stage.width = 150;
+		game.stage.height = 300;
+		
 		// set up the player
 		
-		bunny = game.add.sprite(200, 200, 'bunny');
+		bunny = game.add.sprite(10, 10, 'bunny');
 		game.physics.enable(bunny, Phaser.Physics.Arcade);
 		
 		leftButton = game.input.keyboard.addKey(Phaser.Keyboard.Left);
