@@ -1,0 +1,7 @@
+{
+  "name": "ludumdare29",
+  "version": "0.0.0",
+  "dependencies": {
+    "phaser-official": "2.0.2"
+  }
+}
