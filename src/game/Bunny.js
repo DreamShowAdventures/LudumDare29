@@ -5,6 +5,8 @@
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
  */
 
+var cursors;
+
 Bunny = function (game) {
 	var x = 10;
 	var y = 10;
@@ -12,7 +14,7 @@ Bunny = function (game) {
 	game.physics.enable(this, Phaser.Physics.Arcade);
 	game.add.sprite(10, 10, 'bunny')
 	
-	var cursors = game.input.keyboard.createCursorKeys();
+	cursors = game.input.keyboard.createCursorKeys();
 	//jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 };
 
