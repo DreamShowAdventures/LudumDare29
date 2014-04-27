@@ -357,13 +357,14 @@ Phaser.Group.prototype.updateZ = function () {
 * Advances the Group cursor to the next object in the Group. If it's at the end of the Group it wraps around to the first object.
 *
 * @method Phaser.Group#next
+* @return {*} The child the cursor now points to.
 */
 Phaser.Group.prototype.next = function () {
 
     if (this.cursor)
     {
         //  Wrap the cursor?
-        if (this._cache[8] === this.children.length)
+        if (this._cache[8] >= this.children.length - 1)
         {
             this._cache[8] = 0;
         }
@@ -373,6 +374,8 @@ Phaser.Group.prototype.next = function () {
         }
 
         this.cursor = this.children[this._cache[8]];
+
+        return this.cursor;
     }
 
 };
@@ -381,6 +384,7 @@ Phaser.Group.prototype.next = function () {
 * Moves the Group cursor to the previous object in the Group. If it's at the start of the Group it wraps around to the last object.
 *
 * @method Phaser.Group#previous
+* @return {*} The child the cursor now points to.
 */
 Phaser.Group.prototype.previous = function () {
 
@@ -397,6 +401,8 @@ Phaser.Group.prototype.previous = function () {
         }
 
         this.cursor = this.children[this._cache[8]];
+
+        return this.cursor;
     }
 
 };
@@ -476,7 +482,7 @@ Phaser.Group.prototype.moveUp = function (child) {
 
         if (b)
         {
-            this.swap(a, b);
+            this.swap(child, b);
         }
     }
 
@@ -500,7 +506,7 @@ Phaser.Group.prototype.moveDown = function (child) {
 
         if (b)
         {
-            this.swap(a, b);
+            this.swap(child, b);
         }
     }
 
@@ -1130,6 +1136,28 @@ Phaser.Group.prototype.sort = function (index, order) {
 };
 
 /**
+* This allows you to use your own sort handler function.
+* It will be sent two parameters: the two children involved in the comparison (a and b). It should return -1 if a > b, 1 if a < b or 0 if a === b.
+*
+* @method Phaser.Group#customSort
+* @param {function} sortHandler - Your sort handler function. It will be sent two parameters: the two children involved in the comparison. It must return -1, 1 or 0.
+* @param {object} context - The scope in which the sortHandler is called.
+*/
+Phaser.Group.prototype.customSort = function (sortHandler, context) {
+
+    if (this.children.length < 2)
+    {
+        //  Nothing to swap
+        return;
+    }
+
+    this.children.sort(sortHandler.bind(context));
+
+    this.updateZ();
+
+};
+
+/**
 * An internal helper function for the sort process.
 *
 * @method Phaser.Group#ascendingSortHandler
@@ -1366,13 +1394,16 @@ Phaser.Group.prototype.getRandom = function (startIndex, length) {
 *
 * @method Phaser.Group#remove
 * @param {Any} child - The child to remove.
+* @param {boolean} [destroy=false] - You can optionally call destroy on the child that was removed.
 * @return {boolean} true if the child was removed from this Group, otherwise false.
 */
-Phaser.Group.prototype.remove = function (child) {
+Phaser.Group.prototype.remove = function (child, destroy) {
+
+    if (typeof destroy === 'undefined') { destroy = false; }
 
     if (this.children.length === 0)
     {
-        return;
+        return false;
     }
 
     if (child.events)
@@ -1389,6 +1420,11 @@ Phaser.Group.prototype.remove = function (child) {
         this.next();
     }
 
+    if (destroy)
+    {
+        child.destroy();
+    }
+
     return true;
 
 };
@@ -1398,8 +1434,11 @@ Phaser.Group.prototype.remove = function (child) {
 * The Group container remains on the display list.
 *
 * @method Phaser.Group#removeAll
+* @param {boolean} [destroy=false] - You can optionally call destroy on the child that was removed.
 */
-Phaser.Group.prototype.removeAll = function () {
+Phaser.Group.prototype.removeAll = function (destroy) {
+
+    if (typeof destroy === 'undefined') { destroy = false; }
 
     if (this.children.length === 0)
     {
@@ -1414,6 +1453,11 @@ Phaser.Group.prototype.removeAll = function () {
         }
 
         this.removeChild(this.children[0]);
+
+        if (destroy)
+        {
+            this.children[0].destroy();
+        }
     }
     while (this.children.length > 0);
 
@@ -1426,9 +1470,13 @@ Phaser.Group.prototype.removeAll = function () {
 *
 * @method Phaser.Group#removeBetween
 * @param {number} startIndex - The index to start removing children from.
-* @param {number} endIndex - The index to stop removing children from. Must be higher than startIndex and less than the length of the Group.
+* @param {number} [endIndex] - The index to stop removing children at. Must be higher than startIndex. If undefined this method will remove all children between startIndex and the end of the Group.
+* @param {boolean} [destroy=false] - You can optionally call destroy on the child that was removed.
 */
-Phaser.Group.prototype.removeBetween = function (startIndex, endIndex) {
+Phaser.Group.prototype.removeBetween = function (startIndex, endIndex, destroy) {
+
+    if (typeof endIndex === 'undefined') { endIndex = this.children.length; }
+    if (typeof destroy === 'undefined') { destroy = false; }
 
     if (this.children.length === 0)
     {
@@ -1440,7 +1488,9 @@ Phaser.Group.prototype.removeBetween = function (startIndex, endIndex) {
         return false;
     }
 
-    for (var i = startIndex; i < endIndex; i++)
+    var i = endIndex;
+
+    while (i >= startIndex)
     {
         if (this.children[i].events)
         {
@@ -1449,10 +1499,17 @@ Phaser.Group.prototype.removeBetween = function (startIndex, endIndex) {
 
         this.removeChild(this.children[i]);
 
+        if (destroy)
+        {
+            this.children[i].destroy();
+        }
+
         if (this.cursor === this.children[i])
         {
             this.cursor = null;
         }
+
+        i--;
     }
 
     this.updateZ();

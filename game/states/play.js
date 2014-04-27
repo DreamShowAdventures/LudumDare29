@@ -1,8 +1,12 @@
 'use strict';
 
+// static variables
+
+var GEM_FREQUENCY = 2; // per block
+
 var Bunny = require('../prefabs/bunny');
 var Block = require('../prefabs/block');
-var Coin = require('../prefabs/coin');
+var Gem = require('../prefabs/gem');
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
@@ -13,25 +17,18 @@ function Play() {}
 Play.prototype = {
 	create: function() {
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-		//this.sprite = this.game.add.sprite(this.game.width/2, this.game.height/2, 'yeoman');
-		//this.sprite.inputEnabled = true;
-		//
-		//this.game.physics.arcade.enable(this.sprite);
-		//this.sprite.body.collideWorldBounds = true;
-		//this.sprite.body.bounce.setTo(1,1);
-		//this.sprite.body.velocity.x = this.game.rnd.integerInRange(-500,500);
-		//this.sprite.body.velocity.y = this.game.rnd.integerInRange(-500,500);
 		
-		//this.sprite.events.onInputDown.add(this.clickListener, this);
+		this.game.stage.backgroundColor = '#000';
 		
-		// configure scaling
-		this.game.stage.backgroundColor = '#080';
+		// initialize game variables
+		this.cash = 0;
 		
 		this.chunkGroup = this.game.add.group();
 		this.nextChunkY = 0;
 		this.game.world.bounds.height = 1024;
 		this.game.camera.setBoundsToWorld();
 		this.lastChunkIndex = 0;
+		this.gems = this.game.add.group();
 		this.generateChunk();
 		this.generateChunk();
 		
@@ -76,26 +73,45 @@ Play.prototype = {
 		this.bunny = new Bunny(this.game, 32, 64);
 		this.game.add.existing(this.bunny);
 		
+		// pickup effect
+		this.getEmitter = this.game.add.emitter();
+		this.getEmitter.makeParticles('particles-get');
+		this.getEmitter.gravity = 0;
+		this.getEmitter.setAlpha(0, 1);
+		this.getEmitter.setXSpeed(-25, 25);
+		this.getEmitter.setYSpeed(-25, 25);
+		this.getEmitter.bounce.set(0.5, 0.5);
+		
 		// follow the bunny!
 		this.game.camera.follow(this.bunny);
 		this.game.camera.deadzone = new Phaser.Rectangle(0, 0, 320, 128);
 	},
 	update: function() {
+		// collect gems
+		this.game.physics.arcade.overlap(this.bunny, this.gems, this.collectGems, null, this);
+		
+		// generate a new chunk if we're about to run out
+		
 		if (this.bunny.y > this.chunkGroup.children[this.chunkGroup.children.length - 1].y)
 		{
 			this.generateChunk();
 		}
 		
-		if (this.chunkGroup.children.length > 0) {
-			for (var i = this.chunkGroup.children.length - 1; i >= 0; i--)
+		// garbage collect old chunks
+		
+		var i = this.chunkGroup.children.length;
+		
+		while (i >= 0)
+		{
+			if (this.chunkGroup.children[i])
 			{
-				var nextChunk = this.chunkGroup.children[i];
-				
-				if (nextChunk.y < this.bunny.y - 576)
+				if (this.chunkGroup.children[i].y < this.game.camera.y - 8 * 64)
 				{
-					this.chunkGroup.remove(nextChunk, true);
+					this.chunkGroup.remove(this.chunkGroup.children[i], false);
 				}
 			}
+			
+			i--;
 		}
 		
 		// update dirt particle position
@@ -128,8 +144,11 @@ Play.prototype = {
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
-		this.game.debug.text('DEPTH: ' + this.bunny.y, 16, 16, 'rgb(0,0,0)');
-		this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 16, this.game.height - 12, 'rgb(0,0,0)');
+		this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
+		this.game.debug.text('CASH: $' + this.cash, 8, 32);
+		this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 8, this.game.height - 12, 'rgb(0,0,0)');
+		//this.game.debug.body(this.bunny);
+		//this.game.debug.bodyInfo(this.bunny, 16, 32);
 	},
 	generateChunk: function() {
 		var newChunk = this.chunkGroup.add(this.game.add.group());
@@ -151,15 +170,25 @@ Play.prototype = {
 			}
 		}
 		
-		newChunk.add(new Coin(	this.game,
-								this.game.rnd.integerInRange(0, 64*5),
-								this.game.rnd.integerInRange(0, 64*8)));
+		for (i = 0; i < GEM_FREQUENCY; i++)
+		{
+			this.gems.add(new Gem(	this.game,
+									this.game.rnd.integerInRange(0, 64*5),
+									this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
+		}
 		
 		this.nextChunkY += 64 * 8;
 		
 		this.game.world.bounds.y = newChunk.y - 8 * 64;
 		this.game.camera.bounds.height += 64 * 8;
 		this.game.physics.arcade.setBoundsToWorld();
+	},
+	collectGems: function(player, gem) {
+		this.getEmitter.emitX = gem.x;
+		this.getEmitter.emitY = gem.y;
+		this.cash += gem.frame + 1;
+		this.gems.remove(gem, true);
+		this.getEmitter.start(true, 1000, null, 25);
 	}
 };
 

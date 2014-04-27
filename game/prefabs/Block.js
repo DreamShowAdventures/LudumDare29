@@ -7,8 +7,6 @@ var Block = function(game, x, y, frame) {
 	this.smoothed = false;
 	this.scale.x = 2;
 	this.scale.y = 2;
-	// center rotations
-	//this.anchor.setTo(0.5, 0.5);
 };
 
 Block.prototype = Object.create(Phaser.Sprite.prototype);

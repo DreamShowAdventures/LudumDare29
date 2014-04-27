@@ -11,7 +11,7 @@ var Bunny = function(game, x, y, frame) {
 	// enable physics
 	this.game.physics.arcade.enableBody(this);
 	// set body size
-	this.body.setSize(16, 28, 0, 0);
+	this.body.setSize(12, 14, 0, 12);
 	// enable input
 	this.cursors = game.input.keyboard.createCursorKeys();
 	// wiggle wiggle
