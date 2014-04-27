@@ -2,7 +2,7 @@
 
 var Block = function(game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'dirt', frame);
-	this.frame = game.rnd.integerInRange(0, 7);
+	this.frame = game.rnd.integerInRange(0, 14);//
 	// scale up!
 	this.smoothed = false;
 	this.scale.x = 2;
