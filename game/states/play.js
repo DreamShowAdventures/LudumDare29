@@ -4,9 +4,9 @@
 
 var GEM_FREQUENCY = 2; // per block
 
-var Block = require('../prefabs/block');
-var Bunny = require('../prefabs/bunny');
-var Gem = require('../prefabs/gem');
+var Block = require('../prefabs/Block.js');
+var Bunny = require('../prefabs/Bunny.js');
+var Gem = require('../prefabs/Gem.js');
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
