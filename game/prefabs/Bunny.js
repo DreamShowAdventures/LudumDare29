@@ -20,7 +20,7 @@ var Bunny = function(game, x, y, frame) {
 	this.baseY = this.y;
 	// animate
 	this.animations.add('drill', [0, 1, 2], 12, true);
-	this.animations.play('drill');
+	this.animations.play('drill');// bleh
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -41,8 +41,12 @@ Bunny.prototype.update = function() {
 		this.body.angularVelocity = 200;
 	} else if (this.body.velocity.x > 0 && this.angle > -22.5) {
 		this.body.angularVelocity = -200;
-	} else {
-		this.body.angularVelocity = 0;
+	} else if (this.angle != 0){
+		if (this.angle < 0) {
+			this.body.angularVelocity = 100;
+		} else if (this.angle > 0) {
+			this.body.angularVelocity = -100;
+		}
 	}
 	
 	// wiggle wiggle!!

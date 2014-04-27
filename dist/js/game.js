@@ -3,7 +3,7 @@
 
 //global variables
 window.onload = function () {
-  var game = new Phaser.Game(384, 768, Phaser.AUTO, 'ludumdare29');
+  var game = new Phaser.Game(320, 512, Phaser.AUTO, 'ludumdare29');
 
   // Game States
   game.state.add('boot', require('./states/boot'));
@@ -38,7 +38,7 @@ var Bunny = function(game, x, y, frame) {
 	this.baseY = this.y;
 	// animate
 	this.animations.add('drill', [0, 1, 2], 12, true);
-	this.animations.play('drill');
+	this.animations.play('drill');// bleh
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -59,8 +59,12 @@ Bunny.prototype.update = function() {
 		this.body.angularVelocity = 200;
 	} else if (this.body.velocity.x > 0 && this.angle > -22.5) {
 		this.body.angularVelocity = -200;
-	} else {
-		this.body.angularVelocity = 0;
+	} else if (this.angle != 0){
+		if (this.angle < 0) {
+			this.body.angularVelocity = 100;
+		} else if (this.angle > 0) {
+			this.body.angularVelocity = -100;
+		}
 	}
 	
 	// wiggle wiggle!!
@@ -194,7 +198,7 @@ Play.prototype = {
 		
 		// create the player
 		**/
-		this.bunny = new Bunny(this.game, 32, 32);
+		this.bunny = new Bunny(this.game, 32, 64);
 		this.game.add.existing(this.bunny);
 		//this.bunny = this.game.add.sprite(0, 0, 'bunny');
 	},

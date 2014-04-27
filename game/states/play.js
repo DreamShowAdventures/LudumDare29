@@ -51,7 +51,7 @@ Play.prototype = {
 		
 		// create the player
 		**/
-		this.bunny = new Bunny(this.game, 32, 32);
+		this.bunny = new Bunny(this.game, 32, 64);
 		this.game.add.existing(this.bunny);
 		//this.bunny = this.game.add.sprite(0, 0, 'bunny');
 	},
