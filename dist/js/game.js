@@ -228,9 +228,10 @@ Play.prototype = {
 		
 		// create the dirt emitter
 		
-		this.dirtEmitter = this.game.add.emitter(32, 64, 1);
+		this.dirtEmitter = this.game.add.emitter(32, 64, 500);
 		this.dirtEmitter.makeParticles('particles-dirt', [0,1,2,3], 500, false, false);
 		this.dirtEmitter.setYSpeed(-5, 200);
+		this.dirtEmitter.setRotation(0, 0);
 		this.dirtEmitter.start(false, 500, 25);
 		
 		// create the dirt effect
@@ -242,6 +243,25 @@ Play.prototype = {
 		this.drilldirt.anchor.setTo(0.5, -0.1);
 		this.drilldirt.animations.add('drill', [0,1,2], 16, true);
 		this.drilldirt.animations.play('drill');
+		
+		// create the tunnel
+		
+		this.tunnel = this.game.add.emitter(32, 64, 100);
+		this.tunnel.makeParticles('particles-tunnel-solid', 0, 100, false, false);
+		this.tunnel.setXSpeed(0,0);
+		this.tunnel.setYSpeed(0,0);
+		this.tunnel.gravity = 0;//
+		this.tunnel.start(false, 750, 25);
+		
+		// create the tunnel border
+		
+		this.tunnelborder = this.game.add.emitter(32, 64, 200);
+		this.tunnelborder.makeParticles('particles-tunnel', [0,1,2], 200, false, false);
+		this.tunnelborder.setXSpeed(0, 0);
+		this.tunnelborder.setYSpeed(0, 0);
+		this.tunnelborder.setRotation(0, 0);
+		this.tunnelborder.gravity = 0;
+		this.tunnelborder.start(false, 750, 15);
 		
 		// create the player
 		this.bunny = new Bunny(this.game, 32, 64);
@@ -269,11 +289,33 @@ Play.prototype = {
 			}
 		}
 		
+		// update dirt particle position
+		
 		this.dirtEmitter.emitX = this.bunny.x;
 		this.dirtEmitter.emitY = this.bunny.y + 24;
+		
+		// update drill dirt effect position/angle
+		
 		this.drilldirt.x = this.bunny.x;
 		this.drilldirt.y = this.bunny.y;
 		this.drilldirt.angle = this.bunny.angle;
+		
+		// update tunnel position/angle
+		
+		this.tunnel.emitX = this.bunny.x;
+		this.tunnel.emitY = this.bunny.y;
+		this.tunnel.setRotation(this.bunny.angle, this.bunny.angle);
+		
+		// update the tunnel border
+		
+		this.tunnelborder.emitX = this.game.rnd.pick(
+			[	this.bunny.x - this.bunny.width / 2 + 1, 
+				this.bunny.x - this.bunny.width / 2 + 2,
+				this.bunny.x - this.bunny.width / 2 + 3,
+				this.bunny.x + this.bunny.width / 2 - 1,
+				this.bunny.x + this.bunny.width / 2 - 2,
+				this.bunny.x + this.bunny.width / 2 - 3 ]);
+		this.tunnelborder.emitY = this.bunny.y;
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
@@ -333,6 +375,8 @@ Preload.prototype = {
     this.load.image('coin', 'assets/coin.png');
     this.load.spritesheet('particles-dirt', 'assets/particles_dirt.png', 4, 4);
 	this.load.spritesheet('drilldirt', 'assets/drilldirt.png', 24, 16);
+	this.load.spritesheet('particles-tunnel', 'assets/particles_tunnel.png', 6, 6);
+	this.load.image('particles-tunnel-solid', 'assets/particles_tunnel_solid.png');
   },
   create: function() {
     this.asset.cropEnabled = false;
