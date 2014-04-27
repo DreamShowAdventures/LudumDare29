@@ -7,34 +7,46 @@
 
 var playState = {
 	init: function() {
-		var bunny;
+		
 	},
 	preload: function() {
-		game.load.image('bunny', 'assets/bunny.png');
+		this.load.image('bunny', 'assets/bunny.png');
+		this.load.image('tileset_dirt', 'assets/tileset_dirt.png');
 	},
 	create: function(){
 		// initialize physics
-		game.physics.startSystem(Phaser.Physics.Arcade);
+		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		
 		// configure scaling
-		game.stage.backgroundColor = '#333';
+		this.game.stage.backgroundColor = '#333';
 		
-		if (game.context) {
-			game.renderer.setSmoothingEnabled(game.context, false);
+		if (this.game.context) {
+			this.game.renderer.setSmoothingEnabled(game.context, false);
 		} else {
-			game.renderer.options.antialias = false;
+			this.game.renderer.options.antialias = false;
 		}
 		
-		game.antialias = false;
-		game.stage.smoothed = false;
+		this.game.antialias = false;
+		this.game.stage.smoothed = false;
 		//game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
-		game.scale.width = gameWidth * zoom;
-		game.scale.height = gameHeight * zoom;
-		game.scale.refresh();
+		this.game.scale.width = gameWidth * zoom;
+		this.game.scale.height = gameHeight * zoom;
+		this.game.scale.refresh();
+		
+		// create the chunks
+		
+		this.chunks = this.game.add.group();
+		this.chunks.add(new Chunk(this.game, this));
+		
+		for(var i = 0; i < 3; i++)
+		{
+			//this.chunks.add(new Chunk(this.game,)
+		}
 		
 		// create the player
 		
-		bunny = new Bunny(game);
+		this.bunny = new Bunny(this.game, 10, 10);
+		this.game.add.existing(this.bunny);
 	},
 	update: function() {
 		

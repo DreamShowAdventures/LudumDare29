@@ -5,8 +5,8 @@ git config --global user.name "travis"
 # Configure grunt
 npm install -g grunt-cli
 
-# Build to deploy folder
-grunt
+# Build to deploy folder TODO THIS IS NOT UGLIFIED ATM
+grunt embiggened
 
 # Commit, push changes
 cd deploy
