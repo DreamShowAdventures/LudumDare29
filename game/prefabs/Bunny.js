@@ -10,8 +10,6 @@ var Bunny = function(game, x, y, frame) {
 	this.anchor.setTo(0.5, 0.5);
 	// enable physics
 	this.game.physics.arcade.enableBody(this);
-	// collide with world bounds
-	//this.body.collideWorldBounds = true;
 	// set body size
 	this.body.setSize(16, 28, 0, 0);
 	// enable input

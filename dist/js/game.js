@@ -15,7 +15,7 @@ window.onload = function () {
 
   game.state.start('boot');
 };
-},{"./states/boot":4,"./states/gameover":5,"./states/menu":6,"./states/play":7,"./states/preload":8}],2:[function(require,module,exports){
+},{"./states/boot":5,"./states/gameover":6,"./states/menu":7,"./states/play":8,"./states/preload":9}],2:[function(require,module,exports){
 'use strict';
 
 var Block = function(game, x, y, frame) {
@@ -53,8 +53,6 @@ var Bunny = function(game, x, y, frame) {
 	this.anchor.setTo(0.5, 0.5);
 	// enable physics
 	this.game.physics.arcade.enableBody(this);
-	// collide with world bounds
-	//this.body.collideWorldBounds = true;
 	// set body size
 	this.body.setSize(16, 28, 0, 0);
 	// enable input
@@ -101,6 +99,30 @@ Bunny.prototype.update = function() {
 module.exports = Bunny;
 
 },{}],4:[function(require,module,exports){
+'use strict';
+
+var Coin = function(game, x, y, frame) {
+  Phaser.Sprite.call(this, game, x, y, 'coin', frame);
+  
+  // scale up!
+	this.smoothed = false;
+	this.scale.x = 2;
+	this.scale.y = 2;
+	this.value = 1;
+};
+
+Coin.prototype = Object.create(Phaser.Sprite.prototype);
+Coin.prototype.constructor = Coin;
+
+Coin.prototype.update = function() {
+  
+  // write your prefab's specific update code here
+  
+};
+
+module.exports = Coin;
+
+},{}],5:[function(require,module,exports){
 
 'use strict';
 
@@ -119,7 +141,7 @@ Boot.prototype = {
 
 module.exports = Boot;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
 'use strict';
 function GameOver() {}
@@ -147,7 +169,7 @@ GameOver.prototype = {
 };
 module.exports = GameOver;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 
 'use strict';
 function Menu() {}
@@ -166,11 +188,12 @@ Menu.prototype = {
 
 module.exports = Menu;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var Bunny = require('../prefabs/bunny');
 var Block = require('../prefabs/block');
+var Coin = require('../prefabs/coin');
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
@@ -203,6 +226,12 @@ Play.prototype = {
 		this.generateChunk();
 		this.generateChunk();
 		
+		// create the dirt emitter
+		
+		this.dirtEmitter = this.game.add.emitter(32, 64, 1);
+		this.dirtEmitter.makeParticles('particles-dirt');
+		this.dirtEmitter.start(true, 1000, null, 10);
+		
 		// create the player
 		this.bunny = new Bunny(this.game, 32, 64);
 		this.game.add.existing(this.bunny);
@@ -228,6 +257,10 @@ Play.prototype = {
 				}
 			}
 		}
+		
+		this.dirtEmitter.emitX = this.bunny.x;
+		this.dirtEmitter.emitY = this.bunny.y;
+		this.dirtEmitter.start(true, 1000, null, 10);
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
@@ -254,6 +287,10 @@ Play.prototype = {
 			}
 		}
 		
+		newChunk.add(new Coin(	this.game,
+								this.game.rnd.integerInRange(0, 64*5),
+								this.game.rnd.integerInRange(0, 64*8)));
+		
 		this.nextChunkY += 64 * 8;
 		
 		this.game.world.bounds.y = newChunk.y - 8 * 64;
@@ -263,7 +300,7 @@ Play.prototype = {
 };
 
 module.exports = Play;
-},{"../prefabs/block":2,"../prefabs/bunny":3}],8:[function(require,module,exports){
+},{"../prefabs/block":2,"../prefabs/bunny":3,"../prefabs/coin":4}],9:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -280,6 +317,8 @@ Preload.prototype = {
     this.load.setPreloadSprite(this.asset);
 	this.load.spritesheet('drilling', 'assets/drilling.png', 16, 28);
     this.load.spritesheet('dirt', 'assets/tileset_dirt.png', 32, 32);
+    this.load.image('coin', 'assets/coin.png');
+    this.load.spritesheet('particles-dirt', 'assets/particles_dirt.png', 2, 2);
 
   },
   create: function() {

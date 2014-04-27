@@ -2,6 +2,7 @@
 
 var Bunny = require('../prefabs/bunny');
 var Block = require('../prefabs/block');
+var Coin = require('../prefabs/coin');
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
@@ -34,6 +35,12 @@ Play.prototype = {
 		this.generateChunk();
 		this.generateChunk();
 		
+		// create the dirt emitter
+		
+		this.dirtEmitter = this.game.add.emitter(32, 64, 1);
+		this.dirtEmitter.makeParticles('particles-dirt');
+		this.dirtEmitter.start(true, 1000, null, 10);
+		
 		// create the player
 		this.bunny = new Bunny(this.game, 32, 64);
 		this.game.add.existing(this.bunny);
@@ -59,6 +66,10 @@ Play.prototype = {
 				}
 			}
 		}
+		
+		this.dirtEmitter.emitX = this.bunny.x;
+		this.dirtEmitter.emitY = this.bunny.y;
+		this.dirtEmitter.start(true, 1000, null, 10);
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
@@ -84,6 +95,10 @@ Play.prototype = {
 				yPos += 64;
 			}
 		}
+		
+		newChunk.add(new Coin(	this.game,
+								this.game.rnd.integerInRange(0, 64*5),
+								this.game.rnd.integerInRange(0, 64*8)));
 		
 		this.nextChunkY += 64 * 8;
 		
