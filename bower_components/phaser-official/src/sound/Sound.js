@@ -259,31 +259,6 @@ Phaser.Sound.prototype = {
     },
 
     /**
-     * Description.
-     * @method Phaser.Sound#addMarker
-     * @param {string} name - Description.
-     * @param {Description} start - Description.
-     * @param {Description} stop - Description.
-     * @param {Description} volume - Description.
-     * @param {Description} loop - Description.
-    addMarker: function (name, start, stop, volume, loop) {
-
-        volume = volume || 1;
-        if (typeof loop == 'undefined') { loop = false; }
-
-        this.markers[name] = {
-            name: name,
-            start: start,
-            stop: stop,
-            volume: volume,
-            duration: stop - start,
-            loop: loop
-        };
-
-    },
-    */
-
-    /**
     * Adds a marker into the current Sound. A marker is represented by a unique key and a start time and duration.
     * This allows you to bundle multiple sounds together into a single audio file and use markers to jump between them for playback.
     *
@@ -687,6 +662,7 @@ Phaser.Sound.prototype = {
 
     /**
     * Stop playing this sound.
+    *
     * @method Phaser.Sound#stop
     */
     stop: function () {
@@ -721,6 +697,38 @@ Phaser.Sound.prototype = {
 
         this.currentMarker = '';
         this.onStop.dispatch(this, prevMarker);
+
+    },
+
+    /**
+    * Destroys this sound and all associated events and removes it from the SoundManager.
+    *
+    * @method Phaser.Sound#destroy
+    * @param {boolean} [remove=true] - If true this Sound is automatically removed from the SoundManager.
+    */
+    destroy: function (remove) {
+
+        if (typeof remove === 'undefined') { remove = true; }
+
+        this.stop();
+
+        if (remove)
+        {
+            this.game.sound.remove(this);
+        }
+
+        this.markers = {};
+        this.context = null;
+        this._buffer = null;
+        this.externalNode = null;
+        this.onDecoded.dispose();
+        this.onPlay.dispose();
+        this.onPause.dispose();
+        this.onResume.dispose();
+        this.onLoop.dispose();
+        this.onStop.dispose();
+        this.onMute.dispose();
+        this.onMarkerComplete.dispose();
 
     }
 
