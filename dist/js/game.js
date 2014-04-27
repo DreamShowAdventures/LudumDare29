@@ -229,8 +229,19 @@ Play.prototype = {
 		// create the dirt emitter
 		
 		this.dirtEmitter = this.game.add.emitter(32, 64, 1);
-		this.dirtEmitter.makeParticles('particles-dirt');
-		this.dirtEmitter.start(true, 1000, null, 10);
+		this.dirtEmitter.makeParticles('particles-dirt', [0,1,2,3], 500, false, false);
+		this.dirtEmitter.setYSpeed(-5, 200);
+		this.dirtEmitter.start(false, 500, 25);
+		
+		// create the dirt effect
+		
+		this.drilldirt = this.game.add.sprite(32, 64, 'drilldirt');
+		this.drilldirt.smoothed = false;
+		this.drilldirt.scale.x = 2;
+		this.drilldirt.scale.y = 2;
+		this.drilldirt.anchor.setTo(0.5, -0.1);
+		this.drilldirt.animations.add('drill', [0,1,2], 16, true);
+		this.drilldirt.animations.play('drill');
 		
 		// create the player
 		this.bunny = new Bunny(this.game, 32, 64);
@@ -259,8 +270,10 @@ Play.prototype = {
 		}
 		
 		this.dirtEmitter.emitX = this.bunny.x;
-		this.dirtEmitter.emitY = this.bunny.y;
-		this.dirtEmitter.start(true, 1000, null, 10);
+		this.dirtEmitter.emitY = this.bunny.y + 24;
+		this.drilldirt.x = this.bunny.x;
+		this.drilldirt.y = this.bunny.y;
+		this.drilldirt.angle = this.bunny.angle;
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
@@ -318,8 +331,8 @@ Preload.prototype = {
 	this.load.spritesheet('drilling', 'assets/drilling.png', 16, 28);
     this.load.spritesheet('dirt', 'assets/tileset_dirt.png', 32, 32);
     this.load.image('coin', 'assets/coin.png');
-    this.load.spritesheet('particles-dirt', 'assets/particles_dirt.png', 2, 2);
-
+    this.load.spritesheet('particles-dirt', 'assets/particles_dirt.png', 4, 4);
+	this.load.spritesheet('drilldirt', 'assets/drilldirt.png', 24, 16);
   },
   create: function() {
     this.asset.cropEnabled = false;

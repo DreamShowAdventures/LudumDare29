@@ -15,8 +15,8 @@ Preload.prototype = {
 	this.load.spritesheet('drilling', 'assets/drilling.png', 16, 28);
     this.load.spritesheet('dirt', 'assets/tileset_dirt.png', 32, 32);
     this.load.image('coin', 'assets/coin.png');
-    this.load.spritesheet('particles-dirt', 'assets/particles_dirt.png', 2, 2);
-
+    this.load.spritesheet('particles-dirt', 'assets/particles_dirt.png', 4, 4);
+	this.load.spritesheet('drilldirt', 'assets/drilldirt.png', 24, 16);
   },
   create: function() {
     this.asset.cropEnabled = false;
