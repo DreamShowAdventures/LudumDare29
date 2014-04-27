@@ -11,7 +11,7 @@ var Bunny = function(game, x, y, frame) {
 	// enable physics
 	this.game.physics.arcade.enableBody(this);
 	// collide with world bounds
-	this.body.collideWorldBounds = true;
+	//this.body.collideWorldBounds = true;
 	// set body size
 	this.body.setSize(16, 28, 0, 0);
 	// enable input
@@ -20,7 +20,9 @@ var Bunny = function(game, x, y, frame) {
 	this.baseY = this.y;
 	// animate
 	this.animations.add('drill', [0, 1, 2], 12, true);
-	this.animations.play('drill');// bleh
+	this.animations.play('drill');
+	// moooove
+	this.body.velocity.y = 100;
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -49,13 +51,8 @@ Bunny.prototype.update = function() {
 		}
 	}
 	
-	// wiggle wiggle!!
-	
-	if (this.y === this.baseY) {
-		this.y = this.baseY + 2;
-	} else {
-		this.y = this.baseY;
-	}
+	if (this.x < 0) this.x = 0;
+	if (this.x > 320) this.x = 320;
 };
 
 module.exports = Bunny;
