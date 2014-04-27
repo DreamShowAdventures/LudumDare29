@@ -9,3 +9,4 @@ obj/*
 .idea/*
 *.log
 deploy/*
+dist
