@@ -4,8 +4,8 @@
 
 var GEM_FREQUENCY = 2; // per block
 
-var Bunny = require('../prefabs/bunny');
 var Block = require('../prefabs/block');
+var Bunny = require('../prefabs/bunny');
 var Gem = require('../prefabs/gem');
 
 /**
@@ -157,9 +157,14 @@ Play.prototype = {
 		
 		var xPos = 0;
 		var yPos = 0;
+		var blockAbove = null;
+		var blockLeft = null;
 		
 		for (var i = 0; i < 5 * 8; i++)
 		{
+			//if (i
+			
+			
 			newChunk.add(new Block(this.game, xPos, yPos));
 			xPos += 64;
 			
