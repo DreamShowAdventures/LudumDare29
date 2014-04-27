@@ -5,11 +5,11 @@ git config --global user.name "travis"
 # Configure grunt
 npm install -g grunt-cli
 
-# Build to deploy folder TODO THIS IS NOT UGLIFIED ATM
-grunt embiggened
+# Build to distribution folder
+grunt prod
 
 # Commit, push changes
-cd deploy
+cd dist
 git init
 git add .
 git commit -m "Build successful, build $TRAVIS_BUILD_NUMBER pushed to gh-pages"
