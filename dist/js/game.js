@@ -171,33 +171,11 @@ Play.prototype = {
 		
 		// configure scaling
 		this.game.stage.backgroundColor = '#080';
-		/**
-		if (this.game.context) {
-			this.game.renderer.setSmoothingEnabled(game.context, false);
-		} else {
-			this.game.renderer.options.antialias = false;
-		}
 		
-		this.game.antialias = false;
-		this.game.stage.smoothed = false;
-		//game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
-		this.game.scale.width = gameWidth * zoom;
-		this.game.scale.height = gameHeight * zoom;
-		this.game.scale.refresh();
-		
-		// create the chunks
-		
-		this.chunks = this.game.add.group();
-		//this.chunks.add(new Chunk(this.game, this));
-		
-		//for(var i = 0; i < 3; i++)
-		//{
-			this.chunks.add(new Chunk(this.game, this.chunks));
-			//this.chunks.add(new Chunk(this.game,)
-		//}
+		this.generateChunk();
 		
 		// create the player
-		**/
+		
 		this.bunny = new Bunny(this.game, 32, 64);
 		this.game.add.existing(this.bunny);
 		//this.bunny = this.game.add.sprite(0, 0, 'bunny');
@@ -207,6 +185,9 @@ Play.prototype = {
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
+	},
+	generateChunk: function() {
+		//this
 	}
 };
 
