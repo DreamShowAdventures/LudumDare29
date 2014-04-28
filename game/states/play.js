@@ -29,6 +29,7 @@ Play.prototype = {
 		this.game.camera.setBoundsToWorld();
 		this.lastChunkIndex = 0;
 		this.gems = this.game.add.group();
+		this.lastChunk = null;
 		this.generateChunk();
 		this.generateChunk();
 		
@@ -152,20 +153,30 @@ Play.prototype = {
 	},
 	generateChunk: function() {
 		var newChunk = this.chunkGroup.add(this.game.add.group());
-		this.lastChunkIndex = this.chunkGroup.getIndex(newChunk);
 		newChunk.y = this.nextChunkY;
 		
 		var xPos = 0;
 		var yPos = 0;
-		var blockAbove = null;
-		var blockLeft = null;
+		var aboveFace = 0;
+		var leftFace = 0;
 		
 		for (var i = 0; i < 5 * 8; i++)
 		{
-			//if (i
+			if (i !== 0 && i % 5 !== 0) {
+				leftFace = newChunk.children[i-1].rightFace;
+			} else {
+				leftFace = this.game.rnd.integerInRange(0,1);
+			}
 			
+			if (i > 4) {
+				aboveFace = newChunk.children[i-5].bottomFace;
+			} else if (this.chunkGroup.children.length > 1) {
+				aboveFace = this.lastChunk.children[this.lastChunk.children.length - (5-i)].bottomFace;
+			} else {
+				aboveFace = this.game.rnd.integerInRange(0,1);
+			}
 			
-			newChunk.add(new Block(this.game, xPos, yPos));
+			newChunk.add(new Block(this.game, xPos, yPos, leftFace, aboveFace));
 			xPos += 64;
 			
 			if (xPos >= this.game.width)
@@ -183,6 +194,8 @@ Play.prototype = {
 		}
 		
 		this.nextChunkY += 64 * 8;
+		this.lastChunkIndex = this.chunkGroup.getIndex(newChunk);
+		this.lastChunk = newChunk;
 		
 		this.game.world.bounds.y = newChunk.y - 8 * 64;
 		this.game.camera.bounds.height += 64 * 8;
