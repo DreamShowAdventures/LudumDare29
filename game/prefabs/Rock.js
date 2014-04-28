@@ -1,13 +1,14 @@
 'use strict';
 
-var TOUGH_WEIGHT = 0.25;
+var TOUGH_WEIGHT = 0.25; // percentage of rocks that are 'tough'
+var LARGE_WEIGHT = 0.25; // percentage of rocks that are large
 
 var Rock = function(game, x, y) {
   Phaser.Sprite.call(this, game, x, y, 'rocks-sm', 0);
   
-  this.rocksize = game.rnd.pick([0,1]);
+  this.rocksize = game.rnd.realInRange(0,1) < LARGE_WEIGHT ? 1 : 0;
   
-  if (this.rocksize !== 0) this.loadTexture('rocks-lg',0);
+  if (this.rocksize === 1) this.loadTexture('rocks-lg',0);
   
   if (game.rnd.realInRange(0,1) < TOUGH_WEIGHT) this.frame = 1;
   
@@ -17,7 +18,14 @@ var Rock = function(game, x, y) {
 	this.scale.y = 2;
 	// center rotations
 	this.anchor.setTo(0.5, 0.5);
-	this.angle = game.rnd.realInRange(-180, 180);
+	
+	this.game.physics.arcade.enableBody(this);
+	if (this.rocksize === 0) {
+		this.body.setSize(24, 24, -4, -6);
+	} else {
+		this.body.setSize(48, 48, -4, -6);
+	}
+	this.body.rotation = game.rnd.realInRange(-180, 180);
 	
 	// automatically kill after 15 seconds
 	this.lifespan = 15000;

@@ -1,6 +1,8 @@
 
 'use strict';
 
+// load google fonts
+
 var WebFontConfig = {
     google: {
       families: ['Press Start 2P']
@@ -16,6 +18,8 @@ var WebFontConfig = {
    var s = document.getElementsByTagName('script')[0];
    s.parentNode.insertBefore(wf, s);
  })();
+ 
+ // require global variables
 
 function Preload() {
   this.asset = null;

@@ -14,7 +14,7 @@ Menu.prototype = {
 	var str_sub = '';
 	var str_prs = '';
 	var small = false;
-	
+	//language = 'fr';
 	if (language === 'zh') {str_sub = "\u94BB\u5154\u5B50"; str_prs = "\u6309\u7A7A\u683C";}
 	else if (language === 'es') {str_sub = "Conejito de\nPerforaci\u00F3n"; str_prs = "Presione Inicio"; small = true;}
 	else if (language === 'fr') {str_sub = "FORAGE\nLAPIN"; str_prs = "Espace Presse"; small = true;}
@@ -57,6 +57,7 @@ Menu.prototype = {
 	this.game.add.existing(this.bunny);
 	this.bunny.x = 160;
 	this.bunny.y = 442;
+	this.bunny.controllable = false;
 	this.bunny.kill();
 	
 	// ground
@@ -75,6 +76,8 @@ Menu.prototype = {
 	}
 	
 	this.sub.x = (this.game.width - this.sub.width) / 2;
+	
+	if (language === 'en') this.sub.x = 4; //i dunno this is kinda nuts but it works so whatevs
 	
 	this.press = this.game.add.text(0,this.game.height - 32,str_prs, {font: '12pt "Press Start 2P"', align: 'center'});
 	this.press.x = (this.game.width - this.press.width) / 2;

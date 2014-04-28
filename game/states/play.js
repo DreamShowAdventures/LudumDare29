@@ -2,8 +2,6 @@
 
 // static variables
 
-// one chunk is equal to the screen size. so every time you travel one screen height, you enter a new chunk
-
 var GEM_FREQUENCY = 5; // max per chunk
 var GEM_WEIGHT = 0.5; // chance of any one gem spawning
 var ROCK_FREQUENCY = 2; // max per chunk
@@ -11,6 +9,8 @@ var ROCK_WEIGHT = 0.5; // chance of any one rock spawning
 var CARROT_FREQUENCY = 1; //max per chunk
 var CARROT_WEIGHT = 0.25; // chance of any one carrot spawning
 var INCREASE_PER_CHUNK = 1; // how much faster to go per chunk
+
+// one chunk is equal to the screen size. so every time you travel one screen height, you enter a new chunk
 
 var Block = require('../prefabs/Block.js');
 var Bunny = require('../prefabs/Bunny.js');
@@ -69,8 +69,8 @@ Play.prototype = {
 		this.tunnel.makeParticles('particles-tunnel-solid', 0, 100, false, false);
 		this.tunnel.setXSpeed(0,0);
 		this.tunnel.setYSpeed(0,0);
-		this.tunnel.gravity = 0;//
-		this.tunnel.start(false, 750, 25);
+		this.tunnel.gravity = 0;
+		this.tunnel.start(false, 2000, 25);
 		
 		// create the tunnel border
 		
@@ -80,7 +80,7 @@ Play.prototype = {
 		this.tunnelborder.setYSpeed(0, 0);
 		this.tunnelborder.setRotation(0, 0);
 		this.tunnelborder.gravity = 0;
-		this.tunnelborder.start(false, 750, 15);
+		this.tunnelborder.start(false, 2000, 15);
 		
 		// create the player
 		this.bunny = new Bunny(this.game, 0, 0);
@@ -114,6 +114,9 @@ Play.prototype = {
 		
 		// collect carrots
 		this.game.physics.arcade.overlap(this.bunny, this.carrots, this.collectCarrot, null, this);
+		
+		// rocks
+		this.game.physics.arcade.overlap(this.bunny, this.rocks, this.hitRock, null, this);
 		
 		// generate a new chunk if we're about to run out
 		
@@ -169,15 +172,16 @@ Play.prototype = {
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
-		//this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
-		//this.game.debug.text('CASH: $' + this.cash, 8, 32);
+		this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
+		this.game.debug.text('CASH: $' + this.cash, 8, 32);
 		//this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 8, this.game.height - 12, 'rgb(0,0,0)');
 		//this.game.debug.body(this.bunny);
 		//this.game.debug.bodyInfo(this.bunny, 16, 32);
 		//this.game.debug.body(this.bunny);
-		
+		var i = 0;
 		//for (var i = 0; i < this.gems.length; i++) this.game.debug.body(this.gems.children[i]);
 		//for (i = 0; i < this.carrots.length; i++) this.game.debug.body(this.carrots.children[i]);
+		for (i = 0; i < this.rocks.length; i++) this.game.debug.body(this.rocks.children[i]);
 	},
 	generateChunk: function() {
 		var newChunk = this.chunkGroup.add(this.game.add.group());
@@ -265,6 +269,9 @@ Play.prototype = {
 		this.getEmitter.start(true, 1000, null, 25);
 		
 		this.bunny.powerup();
+	},
+	hitRock: function(player, rock) {
+		this.bunny.hitRock();
 	}
 };
 

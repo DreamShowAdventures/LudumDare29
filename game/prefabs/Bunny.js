@@ -1,8 +1,10 @@
 'use strict';
 
-var POWER_DURATION = 200;
-var NORMAL_SPEED = 100;
-var POWER_SPEED = 200;
+var POWER_DURATION = 200; // how long the powerup lasts, in frames
+var NORMAL_SPEED = 100; // speed of the player, normally
+var POWER_SPEED = 200; // speed of the player when carroted
+var SLOW_SPEED = 50; // speed when drilling through a rock
+var INITIAL_HEALTH = 100; // how much health the player starts with
 
 var Bunny = function(game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'drilling', frame);
@@ -28,6 +30,12 @@ var Bunny = function(game, x, y, frame) {
 	this.powertimer = 0;
 	// moooove
 	this.body.velocity.y = NORMAL_SPEED;
+	// set initial health
+	this.health = INITIAL_HEALTH;
+	// set to false to deny input (menu screen)
+	this.controllable = true;
+	// whether or not a rock is slowing us down
+	this.slowed = false;
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -36,11 +44,11 @@ Bunny.prototype.constructor = Bunny;
 Bunny.prototype.update = function() {
 	this.body.velocity.x = 0;
 	
-	if (this.cursors.left.isDown) {
+	if (this.cursors.left.isDown && this.controllable) {
 		this.body.velocity.x = -100;
 	}
 	
-	if (this.cursors.right.isDown) {
+	if (this.cursors.right.isDown && this.controllable) {
 		this.body.velocity.x = 100;
 	}
 	
@@ -56,6 +64,8 @@ Bunny.prototype.update = function() {
 		}
 	}
 	
+	// carrot powerup neglects slowing by rocks
+	
 	if (this.powertimer > 0)
 	{
 		this.powertimer--;
@@ -65,6 +75,11 @@ Bunny.prototype.update = function() {
 			this.animations.play('drill');
 			this.body.velocity.y = NORMAL_SPEED;
 		}
+	} else if (this.slowed) {
+		this.body.velocity.y = SLOW_SPEED;
+		this.slowed = false;
+	} else {
+		this.body.velocity.y = NORMAL_SPEED;
 	}
 	
 	if (this.x < 0) this.x = 0;
@@ -75,6 +90,10 @@ Bunny.prototype.powerup = function() {
 	this.animations.play('power');
 	this.powertimer = POWER_DURATION;
 	this.body.velocity.y = POWER_SPEED;
+};
+
+Bunny.prototype.hitRock = function() {
+	this.slowed = true;
 }
 
 module.exports = Bunny;
