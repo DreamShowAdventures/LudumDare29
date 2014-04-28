@@ -3,12 +3,17 @@
 // static variables
 
 var GEM_FREQUENCY = 5; // max per chunk
-var GEM_WEIGHT = 0.5; // chance of any one gem spawning
-var ROCK_FREQUENCY = 2; // max per chunk
+var GEM_WEIGHT = 0.5; // chance of any one gem spawning, 1 = 100%
+var ROCK_FREQUENCY = 4; // max per chunk
 var ROCK_WEIGHT = 0.5; // chance of any one rock spawning
 var CARROT_FREQUENCY = 1; //max per chunk
 var CARROT_WEIGHT = 0.25; // chance of any one carrot spawning
+var LAVA_FREQUENCY = 2; // max per chunk
+var LAVA_WEIGHT = 0.1; //chance of any one lava spawning
 var INCREASE_PER_CHUNK = 1; // how much faster to go per chunk
+var LIGHT_ROCK_DAMAGE = 0.5; // how much damage a light rock does
+var DARK_ROCK_DAMAGE = 1.0; // how much damage a dark rock does
+var LAVA_DAMAGE = 1.5; // how much damage lava does, per frame
 
 // one chunk is equal to the screen size. so every time you travel one screen height, you enter a new chunk
 
@@ -17,6 +22,7 @@ var Bunny = require('../prefabs/Bunny.js');
 var Gem = require('../prefabs/Gem.js');
 var Rock = require('../prefabs/Rock.js');
 var Carrot = require('../prefabs/Carrot.js');
+var Lava = require('../prefabs/Lava.js');
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
@@ -38,10 +44,12 @@ Play.prototype = {
 		this.game.world.bounds.height = 1024;
 		this.game.camera.setBoundsToWorld();
 		this.lastChunkIndex = 0;
+		this.tephra = this.game.add.group();
 		this.rocks = this.game.add.group();
 		this.gems = this.game.add.group();
 		this.carrots = this.game.add.group();
 		this.lastChunk = null;
+		this.chunkIndex = 0;
 		this.generateChunk();
 		this.generateChunk();
 		
@@ -118,6 +126,9 @@ Play.prototype = {
 		// rocks
 		this.game.physics.arcade.overlap(this.bunny, this.rocks, this.hitRock, null, this);
 		
+		// lava
+		this.game.physics.arcade.overlap(this.bunny, this.tephra, this.hitLava, null, this);
+		
 		// generate a new chunk if we're about to run out
 		
 		if (this.bunny.y > this.chunkGroup.children[this.chunkGroup.children.length - 1].y)
@@ -174,14 +185,16 @@ Play.prototype = {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
 		this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
 		this.game.debug.text('CASH: $' + this.cash, 8, 32);
+		this.game.debug.text('HEAT: ' + Math.round(this.bunny.health), 8, 48);
 		//this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 8, this.game.height - 12, 'rgb(0,0,0)');
 		//this.game.debug.body(this.bunny);
 		//this.game.debug.bodyInfo(this.bunny, 16, 32);
 		//this.game.debug.body(this.bunny);
-		var i = 0;
+		//var i = 0;
 		//for (var i = 0; i < this.gems.length; i++) this.game.debug.body(this.gems.children[i]);
 		//for (i = 0; i < this.carrots.length; i++) this.game.debug.body(this.carrots.children[i]);
-		for (i = 0; i < this.rocks.length; i++) this.game.debug.body(this.rocks.children[i]);
+		//for (i = 0; i < this.rocks.length; i++) this.game.debug.body(this.rocks.children[i]);
+		//for (i = 0; i < this.tephra.length; i++) this.game.debug.body(this.tephra.children[i]);
 	},
 	generateChunk: function() {
 		var newChunk = this.chunkGroup.add(this.game.add.group());
@@ -226,25 +239,40 @@ Play.prototype = {
 										this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
 		}
 		
-		for (i = 0; i < ROCK_FREQUENCY; i++)
-		{
-			if(chanceRoll(this.game, ROCK_WEIGHT))
-				this.rocks.add(new Rock(	this.game,
-											this.game.rnd.integerInRange(0, 64*5),
-											this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
-		}
-		
-		for (i = 0; i < CARROT_FREQUENCY; i++)
-		{
-			if(chanceRoll(this.game, CARROT_WEIGHT))
-				this.carrots.add(new Carrot(	this.game,
+		if (this.chunkIndex != 0) {// first chunk won't generate rocks, carrots, or lava
+			for (i = 0; i < ROCK_FREQUENCY; i++)
+			{
+				if(chanceRoll(this.game, ROCK_WEIGHT)){
+					var newRock;
+					do {
+						newRock = new Rock(this.game, this.game.rnd.integerInRange(0, 64*5), this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8));
+					} while (this.game.physics.arcade.overlap(newRock, this.rocks));
+					
+					this.rocks.add(newRock);
+				}
+			}
+			
+			for (i = 0; i < CARROT_FREQUENCY; i++)
+			{
+				if(chanceRoll(this.game, CARROT_WEIGHT))
+					this.carrots.add(new Carrot(	this.game,
+													this.game.rnd.integerInRange(0, 64*5),
+													this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
+			}
+			
+			for (i = 0; i < LAVA_FREQUENCY; i++)
+			{
+				if(chanceRoll(this.game, LAVA_WEIGHT))
+					this.tephra.add(new Lava(	this.game,
 												this.game.rnd.integerInRange(0, 64*5),
 												this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
+			}
 		}
 		
 		this.nextChunkY += 64 * 8;
 		this.lastChunkIndex = this.chunkGroup.getIndex(newChunk);
 		this.lastChunk = newChunk;
+		this.chunkIndex++;
 		
 		this.game.world.bounds.y = newChunk.y - 8 * 64;
 		this.game.camera.bounds.height += 64 * 8;
@@ -271,7 +299,17 @@ Play.prototype = {
 		this.bunny.powerup();
 	},
 	hitRock: function(player, rock) {
-		this.bunny.hitRock();
+		if (rock.frame === 1 )
+		{
+			this.bunny.hitRock(DARK_ROCK_DAMAGE);
+		}
+		else
+		{
+			this.bunny.hitRock(LIGHT_ROCK_DAMAGE);
+		}
+	},
+	hitLava: function(player, lava) {
+		this.bunny.hitRock(LAVA_DAMAGE);
 	}
 };
 

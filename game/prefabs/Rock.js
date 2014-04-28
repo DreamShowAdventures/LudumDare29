@@ -14,8 +14,7 @@ var Rock = function(game, x, y) {
   
   // scale up!
 	this.smoothed = false;
-	this.scale.x = 2;
-	this.scale.y = 2;
+	this.scale.x = this.scale.y = game.rnd.realInRange(2, 4);
 	// center rotations
 	this.anchor.setTo(0.5, 0.5);
 	

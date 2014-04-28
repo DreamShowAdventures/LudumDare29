@@ -5,6 +5,8 @@ var NORMAL_SPEED = 100; // speed of the player, normally
 var POWER_SPEED = 200; // speed of the player when carroted
 var SLOW_SPEED = 50; // speed when drilling through a rock
 var INITIAL_HEALTH = 100; // how much health the player starts with
+var REGEN_RATE = 0.1; // how quickly heat dissipates if not drilling through rock or lava
+var REGEN_MAX = 100; // the maximum amount of heat that can be regenerated
 
 var Bunny = function(game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'drilling', frame);
@@ -25,6 +27,8 @@ var Bunny = function(game, x, y, frame) {
 	// animate
 	this.animations.add('drill', [0, 1, 2], 12, true);
 	this.animations.add('power', [3, 4, 5], 24, true);
+	this.animations.add('crack', [6, 7, 8], 2, false);
+	this.animations.add('overheat', [9, 10, 11, 12], 2, false);
 	this.animations.play('drill');
 	// POWER UP
 	this.powertimer = 0;
@@ -64,6 +68,10 @@ Bunny.prototype.update = function() {
 		}
 	}
 	
+	if (!this.slowed && this.health < REGEN_MAX){
+		this.health += REGEN_RATE;
+	}
+	
 	// carrot powerup neglects slowing by rocks
 	
 	if (this.powertimer > 0)
@@ -92,8 +100,12 @@ Bunny.prototype.powerup = function() {
 	this.body.velocity.y = POWER_SPEED;
 };
 
-Bunny.prototype.hitRock = function() {
+Bunny.prototype.hitRock = function(damage) {
 	this.slowed = true;
+	
+	if (!this.powertimer > 0) {
+		this.health -= damage;
+	}
 }
 
 module.exports = Bunny;
