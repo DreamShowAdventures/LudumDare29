@@ -1,8 +1,8 @@
 'use strict';
 
-var POWER_DURATION = 200; // how long the powerup lasts, in frames
+var POWER_DURATION = 450; // how long the powerup lasts, in frames
 var NORMAL_SPEED = 100; // speed of the player, normally
-var POWER_SPEED = 200; // speed of the player when carroted
+var POWER_SPEED = 300; // speed of the player when carroted
 var SLOW_SPEED = 50; // speed when drilling through a rock
 var INITIAL_HEALTH = 100; // how much health the player starts with
 var REGEN_RATE = 0.1; // how quickly heat dissipates if not drilling through rock or lava
