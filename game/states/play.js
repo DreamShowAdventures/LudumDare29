@@ -71,7 +71,9 @@ Play.prototype = {
 		this.tunnelborder.start(false, 750, 15);
 		
 		// create the player
-		this.bunny = new Bunny(this.game, 32, 64);
+		this.bunny = new Bunny(this.game, 0, 0);
+		this.bunny.x = this.game.width / 2;
+		this.bunny.y = -this.bunny.height;
 		this.game.add.existing(this.bunny);
 		
 		// pickup effect
@@ -86,7 +88,14 @@ Play.prototype = {
 		// follow the bunny!
 		this.game.camera.follow(this.bunny);
 		this.game.camera.deadzone = new Phaser.Rectangle(0, 0, 320, 128);
-	},
+		
+		this.fade = this.game.add.bitmapData(this.game.width, this.game.height);
+		this.fade.context.fillStyle = '#000000';
+		this.fade.context.fillRect(0, 0, this.game.width, this.game.height);
+		this.fadesprite = this.game.add.sprite(0, 0, this.fade);
+		this.fadesprite.alpha = 1;
+		this.game.add.tween(this.fadesprite).to({alpha:0}, 250, null, true);
+	},//
 	update: function() {
 		// collect gems
 		this.game.physics.arcade.overlap(this.bunny, this.gems, this.collectGems, null, this);
@@ -200,6 +209,11 @@ Play.prototype = {
 		this.game.world.bounds.y = newChunk.y - 8 * 64;
 		this.game.camera.bounds.height += 64 * 8;
 		this.game.physics.arcade.setBoundsToWorld();
+		
+		// FASTER FASTER BUNNY
+		if (this.bunny) {
+			this.bunny.body.velocity.y += 0.25;
+		}
 	},
 	collectGems: function(player, gem) {
 		this.getEmitter.emitX = gem.x;
