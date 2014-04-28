@@ -12,9 +12,8 @@ var Gem = function(game, x, y, frame) {
 	this.anchor.setTo(0.5, 0.5);
 	
 	this.game.physics.arcade.enableBody(this);
-	this.body.setSize(-4, -4, 8, 8);
-	
-	this.angle = game.rnd.realInRange(-180, 180);
+	this.body.setSize(8, 8, 0, 0);
+	this.body.rotation = game.rnd.realInRange(-180, 180);
 	
 	// automatically kill after 15 seconds
 	this.lifespan = 15000;
