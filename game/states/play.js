@@ -115,11 +115,17 @@ Play.prototype = {
 		this.fade.context.fillRect(0, 0, this.game.width, this.game.height);
 		this.fadesprite = this.game.add.sprite(0, 0, this.fade);
 		this.fadesprite.alpha = 1;
-		this.game.add.tween(this.fadesprite).to({alpha:0}, 250, null, true);
+		this.game.add.tween(this.fadesprite).to({alpha:0}, 400, null, true);
+		
+		// dead flag
+		this.dead = false;
 		
 		// JAMS
-		this.music = this.game.add.sound('coral', 0.75, true);
+		this.music = this.game.add.sound('coral', 0, true);
 		this.music.play();
+		this.soundcarrot = this.game.add.sound('carrot');
+		this.soundgem = this.game.add.sound('gem');
+		this.soundouch = this.game.add.sound('ouch');
 	},//
 	update: function() {
 		// collect gems
@@ -185,6 +191,12 @@ Play.prototype = {
 				this.bunny.x + this.bunny.width / 2 - 2,
 				this.bunny.x + this.bunny.width / 2 - 3 ]);
 		this.tunnelborder.emitY = this.bunny.y;
+		
+		// fade in music
+		if (this.music.volume < 0.75)
+		{
+			this.music.volume += 0.01;
+		}
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
@@ -294,6 +306,8 @@ Play.prototype = {
 		this.cash += gem.frame + 1;
 		this.gems.remove(gem, true);
 		this.getEmitter.start(true, 1000, null, 25);
+		
+		this.soundgem.play();
 	},
 	collectCarrot: function(player, carrot) {
 		this.getEmitter.emitX = carrot.x;
@@ -302,6 +316,7 @@ Play.prototype = {
 		this.getEmitter.start(true, 1000, null, 25);
 		
 		this.bunny.powerup();
+		this.soundcarrot.play();
 	},
 	hitRock: function(player, rock) {
 		if (rock.frame === 1 )
@@ -312,9 +327,13 @@ Play.prototype = {
 		{
 			this.bunny.hitRock(LIGHT_ROCK_DAMAGE);
 		}
+		
+		this.soundouch.play();
 	},
 	hitLava: function(player, lava) {
 		this.bunny.hitRock(LAVA_DAMAGE);
+		
+		this.soundouch.play();
 	}
 };
 

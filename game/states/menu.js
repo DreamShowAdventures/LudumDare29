@@ -96,12 +96,14 @@ Menu.prototype = {
 	this.fade.context.fillStyle = '#000000';
 	this.fade.context.fillRect(0, 0, this.game.width, this.game.height);
 	this.fadesprite = this.game.add.sprite(0, 0, this.fade);
-	this.fadesprite.alpha = 0;
+	this.fadesprite.alpha = 0.99;
+	this.game.add.tween(this.fadesprite).to({alpha:0}, 250, null, true);
 	this.fading = false;
 	
 	// JAMS
-	this.music = this.game.add.sound('double', 0.75, true);
+	this.music = this.game.add.sound('double', 0, true);
 	this.music.play();
+	this.soundjump = this.game.add.sound('jump', 0.3, false);
   },
   render: function() {
 	//this.game.debug.text('X POS: ' + this.bun.x, 8, 16);
@@ -124,9 +126,12 @@ Menu.prototype = {
 		this.timer++;
 	}
 	
+	if (this.timer === 5) {
+		this.bun.y += 4;
+	}
+	
 	if (this.timer > 25 && !this.jumping)
 	{
-		this.bun.y += 4;
 		this.bun.animations.play('walk');
 		this.game.add.tween(this.bun).to({x:146}, 1000, Phaser.Easing.Quadratic.InOut, true);
 		this.jumping = true;
@@ -135,6 +140,7 @@ Menu.prototype = {
 	if (this.timer > 40 && !this.phase)
 	{
 		this.game.add.tween(this.bun).to({y:320}, 350, Phaser.Easing.Quadratic.InOut, true, 0, 1, true);
+		this.soundjump.play();
 		this.bun.animations.stop();
 		this.phase = true;
 	}
@@ -158,6 +164,8 @@ Menu.prototype = {
 		this.music.volume -= 0.05;
 	} else if (this.fading && this.music.volume !== 0) {
 		this.music.volume = 0;
+	} else if (this.music.volume < 0.75) {
+		this.music.volume += 0.005;
 	}
 	
 	if (this.fadesprite.alpha === 1)
