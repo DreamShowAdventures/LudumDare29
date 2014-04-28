@@ -15,6 +15,9 @@ var Gem = function(game, x, y, frame) {
 	this.body.setSize(6, 6, 5, 5);
 	
 	this.angle = game.rnd.realInRange(-180, 180);
+	
+	// automatically kill after 15 seconds
+	this.lifespan = 15000;
 };
 
 Gem.prototype = Object.create(Phaser.Sprite.prototype);

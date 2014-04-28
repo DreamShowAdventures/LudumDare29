@@ -2,11 +2,20 @@
 
 // static variables
 
-var GEM_FREQUENCY = 2; // per block
+// one chunk is equal to the screen size. so every time you travel one screen height, you enter a new chunk
+
+var GEM_FREQUENCY = 5; // max per chunk
+var GEM_WEIGHT = 0.5; // chance of any one gem spawning
+var ROCK_FREQUENCY = 2; // max per chunk
+var ROCK_WEIGHT = 0.5; // chance of any one rock spawning
+var CARROT_FREQUENCY = 1; //max per chunk
+var CARROT_WEIGHT = 1; // chance of any one carrot spawning
+var INCREASE_PER_CHUNK = 1; // how much faster to go per chunk
 
 var Block = require('../prefabs/Block.js');
 var Bunny = require('../prefabs/Bunny.js');
 var Gem = require('../prefabs/Gem.js');
+var Rock = require('../prefabs/Rock.js');
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
@@ -28,6 +37,7 @@ Play.prototype = {
 		this.game.world.bounds.height = 1024;
 		this.game.camera.setBoundsToWorld();
 		this.lastChunkIndex = 0;
+		this.rocks = this.game.add.group();
 		this.gems = this.game.add.group();
 		this.lastChunk = null;
 		this.generateChunk();
@@ -197,9 +207,18 @@ Play.prototype = {
 		
 		for (i = 0; i < GEM_FREQUENCY; i++)
 		{
-			this.gems.add(new Gem(	this.game,
-									this.game.rnd.integerInRange(0, 64*5),
-									this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
+			if(chanceRoll(this.game, GEM_WEIGHT))
+				this.gems.add(new Gem(	this.game,
+										this.game.rnd.integerInRange(0, 64*5),
+										this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
+		}
+		
+		for (i = 0; i < ROCK_FREQUENCY; i++)
+		{
+			if(chanceRoll(this.game, ROCK_WEIGHT))
+				this.rocks.add(new Rock(	this.game,
+											this.game.rnd.integerInRange(0, 64*5),
+											this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
 		}
 		
 		this.nextChunkY += 64 * 8;
@@ -212,7 +231,7 @@ Play.prototype = {
 		
 		// FASTER FASTER BUNNY
 		if (this.bunny) {
-			this.bunny.body.velocity.y += 0.25;
+			this.bunny.body.velocity.y += INCREASE_PER_CHUNK;
 		}
 	},
 	collectGems: function(player, gem) {
@@ -222,6 +241,10 @@ Play.prototype = {
 		this.gems.remove(gem, true);
 		this.getEmitter.start(true, 1000, null, 25);
 	}
+};
+
+var chanceRoll = function(game,chanceAsFloat) {
+	return (game.rnd.realInRange(0,1) < chanceAsFloat);
 };
 
 module.exports = Play;
