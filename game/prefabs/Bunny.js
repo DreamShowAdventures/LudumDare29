@@ -1,5 +1,9 @@
 'use strict';
 
+var POWER_DURATION = 200;
+var NORMAL_SPEED = 100;
+var POWER_SPEED = 200;
+
 var Bunny = function(game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'drilling', frame);
 	// scale up!
@@ -18,9 +22,12 @@ var Bunny = function(game, x, y, frame) {
 	this.baseY = this.y;
 	// animate
 	this.animations.add('drill', [0, 1, 2], 12, true);
+	this.animations.add('power', [3, 4, 5], 24, true);
 	this.animations.play('drill');
+	// POWER UP
+	this.powertimer = 0;
 	// moooove
-	this.body.velocity.y = 100;
+	this.body.velocity.y = NORMAL_SPEED;
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -43,14 +50,31 @@ Bunny.prototype.update = function() {
 		this.body.angularVelocity = -200;
 	} else if (this.angle != 0){
 		if (this.angle < 0) {
-			this.body.angularVelocity = 100;
+			this.body.angularVelocity = 50;
 		} else if (this.angle > 0) {
-			this.body.angularVelocity = -100;
+			this.body.angularVelocity = -50;
+		}
+	}
+	
+	if (this.powertimer > 0)
+	{
+		this.powertimer--;
+		
+		if (this.powertimer === 0)
+		{
+			this.animations.play('drill');
+			this.body.velocity.y = NORMAL_SPEED;
 		}
 	}
 	
 	if (this.x < 0) this.x = 0;
 	if (this.x > 320) this.x = 320;
 };
+
+Bunny.prototype.powerup = function() {
+	this.animations.play('power');
+	this.powertimer = POWER_DURATION;
+	this.body.velocity.y = POWER_SPEED;
+}
 
 module.exports = Bunny;

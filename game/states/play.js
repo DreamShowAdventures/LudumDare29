@@ -9,7 +9,7 @@ var GEM_WEIGHT = 0.5; // chance of any one gem spawning
 var ROCK_FREQUENCY = 2; // max per chunk
 var ROCK_WEIGHT = 0.5; // chance of any one rock spawning
 var CARROT_FREQUENCY = 1; //max per chunk
-var CARROT_WEIGHT = 1; // chance of any one carrot spawning
+var CARROT_WEIGHT = 0.25; // chance of any one carrot spawning
 var INCREASE_PER_CHUNK = 1; // how much faster to go per chunk
 
 var Block = require('../prefabs/Block.js');
@@ -112,6 +112,9 @@ Play.prototype = {
 		// collect gems
 		this.game.physics.arcade.overlap(this.bunny, this.gems, this.collectGems, null, this);
 		
+		// collect carrots
+		this.game.physics.arcade.overlap(this.bunny, this.carrots, this.collectCarrot, null, this);
+		
 		// generate a new chunk if we're about to run out
 		
 		if (this.bunny.y > this.chunkGroup.children[this.chunkGroup.children.length - 1].y)
@@ -166,14 +169,15 @@ Play.prototype = {
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
-		this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
-		this.game.debug.text('CASH: $' + this.cash, 8, 32);
-		this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 8, this.game.height - 12, 'rgb(0,0,0)');
+		//this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
+		//this.game.debug.text('CASH: $' + this.cash, 8, 32);
+		//this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 8, this.game.height - 12, 'rgb(0,0,0)');
 		//this.game.debug.body(this.bunny);
 		//this.game.debug.bodyInfo(this.bunny, 16, 32);
-		this.game.debug.body(this.bunny);
+		//this.game.debug.body(this.bunny);
 		
-		for (var i = 0; i < this.gems.length; i++) this.game.debug.body(this.gems.children[i]);
+		//for (var i = 0; i < this.gems.length; i++) this.game.debug.body(this.gems.children[i]);
+		//for (i = 0; i < this.carrots.length; i++) this.game.debug.body(this.carrots.children[i]);
 	},
 	generateChunk: function() {
 		var newChunk = this.chunkGroup.add(this.game.add.group());
@@ -229,9 +233,9 @@ Play.prototype = {
 		for (i = 0; i < CARROT_FREQUENCY; i++)
 		{
 			if(chanceRoll(this.game, CARROT_WEIGHT))
-				this.rocks.add(new Carrot(	this.game,
-											this.game.rnd.integerInRange(0, 64*5),
-											this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
+				this.carrots.add(new Carrot(	this.game,
+												this.game.rnd.integerInRange(0, 64*5),
+												this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
 		}
 		
 		this.nextChunkY += 64 * 8;
@@ -253,6 +257,14 @@ Play.prototype = {
 		this.cash += gem.frame + 1;
 		this.gems.remove(gem, true);
 		this.getEmitter.start(true, 1000, null, 25);
+	},
+	collectCarrot: function(player, carrot) {
+		this.getEmitter.emitX = carrot.x;
+		this.getEmitter.emitY = carrot.y;
+		this.carrots.remove(carrot, true);
+		this.getEmitter.start(true, 1000, null, 25);
+		
+		this.bunny.powerup();
 	}
 };
 
