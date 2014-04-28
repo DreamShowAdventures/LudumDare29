@@ -24,8 +24,10 @@ function Preload() {
 
 Preload.prototype = {
   preload: function() {
-    this.asset = this.add.sprite(this.width/2,this.height/2, 'preloader');
-    this.asset.anchor.setTo(0.5, 0.5);
+    this.asset = this.add.sprite(0,0, 'preloader');
+    this.asset.anchor.setTo(0, 0.5);
+	//this.asset.x = this.game.width / 2;
+	this.asset.y = this.game.height / 2;
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
 	this.load.spritesheet('drilling', 'assets/drilling.png', 16, 28);
