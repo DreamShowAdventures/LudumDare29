@@ -1,5 +1,10 @@
 'use strict';
 
+// small nugget, medium nugget, large nugget, small ruby, small emerald, small lapis
+// large ruby, large emerald, large lapis, DIAMOND
+
+var GEM_VALUES = [1,2,3,4,5,6,7,8,9,10];
+
 var Gem = function(game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'gems', game.rnd.integerInRange(0,9));
 	
@@ -27,5 +32,9 @@ Gem.prototype.update = function() {
   // write your prefab's specific update code here
   
 };
+
+Gem.prototype.value = function() {
+	return GEM_VALUES[this.frame];
+}
 
 module.exports = Gem;

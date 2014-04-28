@@ -222,6 +222,10 @@ Play.prototype = {
 			// update text
 			this.depthtext.text = this.bunny.y > 0 ? Math.round(this.bunny.y/10) + "m" : "0m";
 			this.cashtext.text = "$" + this.cash;
+			
+			if (this.bunny.health < 0) {
+				this.dead();
+			}
 		}
 	},
 	render: function() {
@@ -329,7 +333,7 @@ Play.prototype = {
 	collectGems: function(player, gem) {
 		this.getEmitter.emitX = gem.x;
 		this.getEmitter.emitY = gem.y;
-		this.cash += gem.frame + 1;
+		this.cash += gem.value();
 		this.gems.remove(gem, true);
 		this.getEmitter.start(true, 1000, null, 25);
 		
