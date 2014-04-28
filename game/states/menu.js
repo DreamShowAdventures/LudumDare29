@@ -28,6 +28,27 @@ Menu.prototype = {
 	this.bg.scale.x = 2;
 	this.bg.scale.y = 2;
 	
+	var xPos = [25,50,75];
+	var yPos = [240,300,360];
+	
+	for (var i = 0; i < 3; i++)
+	{
+		var apple = this.game.add.sprite(xPos.splice(this.game.rnd.integerInRange(0,xPos.length-1),1), yPos.splice(this.game.rnd.integerInRange(0,yPos.length-1),1), 'apple');
+		apple.smoothed = false;
+		apple.scale.x = 2;
+		apple.scale.y = 2;
+		apple.anchor.setTo(0.5, 0.25);
+		apple.angle = this.game.rnd.pick([-45,45]);
+		this.game.add.tween(apple).to({angle: apple.angle < 0 ? 45 : -45}, 2000, Phaser.Easing.Quadratic.InOut, true, 0, Number.MAX_VALUE, true);
+		
+		var eaten = this.game.add.sprite(this.game.rnd.integerInRange(this.game.width / 2 + 16,this.game.width), this.game.height - 65, 'eaten');
+		eaten.smoothed = false;
+		//eaten.scale.x = 2;
+		//eaten.scale.y = 2;
+		eaten.anchor.setTo(0.5, 0.5);
+		eaten.angle = this.game.rnd.integerInRange(-180,180);
+	}
+	
 	this.clouds = this.game.add.sprite(0, 24, 'clouds');
 	this.clouds.smoothed = false;
 	this.clouds.scale.x = 2;
@@ -101,7 +122,7 @@ Menu.prototype = {
 	this.fading = false;
 	
 	// JAMS
-	this.music = this.game.add.sound('double', 0, true);
+	this.music = this.game.add.sound('double', 0.75, true);
 	this.music.play();
 	this.soundjump = this.game.add.sound('jump', 0.3, false);
   },
@@ -164,8 +185,6 @@ Menu.prototype = {
 		this.music.volume -= 0.05;
 	} else if (this.fading && this.music.volume !== 0) {
 		this.music.volume = 0;
-	} else if (this.music.volume < 0.75) {
-		this.music.volume += 0.005;
 	}
 	
 	if (this.fadesprite.alpha === 1)

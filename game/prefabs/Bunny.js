@@ -106,6 +106,14 @@ Bunny.prototype.hitRock = function(damage) {
 	if (!this.powertimer > 0) {
 		this.health -= damage;
 	}
-}
+};
+
+Bunny.prototype.updateSpeed = function(amount) {
+	NORMAL_SPEED += amount;
+};
+
+Bunny.prototype.maxHealth = function() {
+	return INITIAL_HEALTH;
+};
 
 module.exports = Bunny;

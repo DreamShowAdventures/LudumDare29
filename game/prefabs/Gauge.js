@@ -1,7 +1,7 @@
 'use strict';
 
-var Gauge = function(game, x, y) {
-  Phaser.Sprite.call(this, game, x, y, 'gauge', 0);
+var Gauge = function(game, x, y, key) {
+  Phaser.Sprite.call(this, game, x, y, key, 0);
 // scale up!
 	this.smoothed = false;
 	this.scale.x = this.scale.y = 2;
@@ -9,6 +9,7 @@ var Gauge = function(game, x, y) {
 	// center rotations
 	this.anchor.setTo(0.5, 0.5);
 	
+	game.add.existing(this);
   this.needle = game.add.sprite(x, y, 'needle');
   // scale up!
 	this.needle.smoothed = false;
@@ -16,7 +17,15 @@ var Gauge = function(game, x, y) {
 	
 	// center rotations
 	this.needle.anchor.setTo(0.5, 0.5);
+	
+	this.minAngle = -90;
+	this.maxAngle = 90;
+	this.range = this.maxAngle - this.minAngle;
+	
+	this.needle.angle = this.maxAngle;
   
+	this.fixedToCamera = true;
+	this.needle.fixedToCamera = true;
 };
 
 Gauge.prototype = Object.create(Phaser.Sprite.prototype);
@@ -27,5 +36,13 @@ Gauge.prototype.update = function() {
   // write your prefab's specific update code here
   
 };
+
+Gauge.prototype.updateNeedle = function(value, min, max) {
+	if (min < max) {
+		this.needle.angle = (value - min) / (max - min) * this.range + this.minAngle;
+	} else {
+		this.needle.angle = (value - min) / (max - min) * this.range + this.minAngle;
+	}
+}
 
 module.exports = Gauge;
