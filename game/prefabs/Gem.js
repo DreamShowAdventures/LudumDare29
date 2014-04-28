@@ -12,7 +12,7 @@ var Gem = function(game, x, y, frame) {
 	this.anchor.setTo(0.5, 0.5);
 	
 	this.game.physics.arcade.enableBody(this);
-	this.body.setSize(6, 6, 5, 5);
+	this.body.setSize(-4, -4, 8, 8);
 	
 	this.angle = game.rnd.realInRange(-180, 180);
 	

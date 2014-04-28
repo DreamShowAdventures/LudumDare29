@@ -43,6 +43,7 @@ Preload.prototype = {
 	this.load.spritesheet('chacket', 'assets/chacket.png', 18, 22);
 	this.load.spritesheet('rocks-sm', 'assets/rocks_sm.png', 29, 28);
 	this.load.spritesheet('rocks-lg', 'assets/rocks_lg.png', 58, 56);
+	this.load.image('carrot', 'assets/carrot.png');
   },
   create: function() {
     this.asset.cropEnabled = false;

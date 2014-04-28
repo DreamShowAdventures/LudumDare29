@@ -16,6 +16,7 @@ var Block = require('../prefabs/Block.js');
 var Bunny = require('../prefabs/Bunny.js');
 var Gem = require('../prefabs/Gem.js');
 var Rock = require('../prefabs/Rock.js');
+var Carrot = require('../prefabs/Carrot.js');
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
@@ -39,6 +40,7 @@ Play.prototype = {
 		this.lastChunkIndex = 0;
 		this.rocks = this.game.add.group();
 		this.gems = this.game.add.group();
+		this.carrots = this.game.add.group();
 		this.lastChunk = null;
 		this.generateChunk();
 		this.generateChunk();
@@ -169,6 +171,9 @@ Play.prototype = {
 		this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 8, this.game.height - 12, 'rgb(0,0,0)');
 		//this.game.debug.body(this.bunny);
 		//this.game.debug.bodyInfo(this.bunny, 16, 32);
+		this.game.debug.body(this.bunny);
+		
+		for (var i = 0; i < this.gems.length; i++) this.game.debug.body(this.gems.children[i]);
 	},
 	generateChunk: function() {
 		var newChunk = this.chunkGroup.add(this.game.add.group());
@@ -217,6 +222,14 @@ Play.prototype = {
 		{
 			if(chanceRoll(this.game, ROCK_WEIGHT))
 				this.rocks.add(new Rock(	this.game,
+											this.game.rnd.integerInRange(0, 64*5),
+											this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
+		}
+		
+		for (i = 0; i < CARROT_FREQUENCY; i++)
+		{
+			if(chanceRoll(this.game, CARROT_WEIGHT))
+				this.rocks.add(new Carrot(	this.game,
 											this.game.rnd.integerInRange(0, 64*5),
 											this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8)));
 		}

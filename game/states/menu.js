@@ -8,6 +8,21 @@ Menu.prototype = {
   create: function() {
 	this.game.stage.backgroundColor = '#5FB0F3';
 	
+	var language = window.navigator.userLanguage || window.navigator.language;
+	language = language.substring(0,2);
+	
+	var str_sub = '';
+	var str_prs = '';
+	var small = false;
+	
+	if (language === 'zh') {str_sub = "\u94BB\u5154\u5B50"; str_prs = "\u6309\u7A7A\u683C";}
+	else if (language === 'es') {str_sub = "Conejito de\nPerforaci\u00F3n"; str_prs = "Presione Inicio"; small = true;}
+	else if (language === 'fr') {str_sub = "FORAGE\nLAPIN"; str_prs = "Espace Presse"; small = true;}
+	else if (language === 'de') {str_sub = "BOHRER\nHASE"; str_prs = "Presseraum"; small = true;}
+	else if (language === 'it') {str_sub = "TRAPANO\nCONIGLIO"; str_prs = "Spazio Stampa"; small = true;}
+	else if (language === 'ja') {str_sub = "\u30C9\u30EA\u30EB\u30D0\u30CB\u30FC"; str_prs = "\u30D7\u30EC\u30B9\u958B\u59CB"; small = true;}
+	else { str_sub = 'DRILL\nBUNNY'; str_prs = 'Press Space!';}
+	
     this.bg = this.game.add.sprite(0, 216, 'title');
 	this.bg.smoothed = false;
 	this.bg.scale.x = 2;
@@ -52,9 +67,18 @@ Menu.prototype = {
 	this.ground.scale.y = 2;
 	
 	this.title = this.game.add.text(8,8,'Chacket\nValleyparker:', {fill : 'red', font: '18pt "Press Start 2P"', align: 'center'});
-	this.sub = this.game.add.text(4,64,'DRILL\nBUNNY', {font: '48pt "Press Start 2P"', align: 'center'});
-	this.press = this.game.add.text(0,this.game.height - 32,'Press Space!', {font: '12pt "Press Start 2P"', align: 'center'});
+	
+	if (small) {
+		this.sub = this.game.add.text(4,64,str_sub+"\n ", {font: '18pt "Press Start 2P"', align: 'center'});
+	} else {
+		this.sub = this.game.add.text(4,64,str_sub+"\n ", {font: '48pt "Press Start 2P"', align: 'center'});
+	}
+	
+	this.sub.x = (this.game.width - this.sub.width) / 2;
+	
+	this.press = this.game.add.text(0,this.game.height - 32,str_prs, {font: '12pt "Press Start 2P"', align: 'center'});
 	this.press.x = (this.game.width - this.press.width) / 2;
+	
 	this.game.add.tween(this.title).to({y:this.title.y + 16}, 2000, Phaser.Easing.Quadratic.InOut, true, 0, Number.MAX_VALUE, true);
 	this.game.add.tween(this.sub).to({y:this.sub.y + 16}, 2000, Phaser.Easing.Quadratic.InOut, true, 0, Number.MAX_VALUE, true);
 	
