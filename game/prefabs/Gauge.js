@@ -39,9 +39,21 @@ Gauge.prototype.update = function() {
 
 Gauge.prototype.updateNeedle = function(value, min, max) {
 	if (min < max) {
-		this.needle.angle = (value - min) / (max - min) * this.range + this.minAngle;
+		if (value > max) {
+			this.needle.angle = this.maxAngle;
+		} else if (value < min) {
+			this.needle.angle = this.minAngle;
+		} else {
+			this.needle.angle = (value - min) / (max - min) * this.range + this.minAngle;
+		}
 	} else {
-		this.needle.angle = (value - min) / (max - min) * this.range + this.minAngle;
+		if (value > min) {
+			this.needle.angle = this.minAngle;
+		} else if (value < max) {
+			this.needle.angle = this.maxAngle;
+		} else {
+			this.needle.angle = (value - min) / (max - min) * this.range + this.minAngle;
+		}
 	}
 }
 
