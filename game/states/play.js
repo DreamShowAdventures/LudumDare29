@@ -23,6 +23,7 @@ var Gem = require('../prefabs/Gem.js');
 var Rock = require('../prefabs/Rock.js');
 var Carrot = require('../prefabs/Carrot.js');
 var Lava = require('../prefabs/Lava.js');
+var Gauge = require('../prefabs/Gauge.js');
 
 /**
  * @author Steve Richey http://www.steverichey.com @stvr_tweets
@@ -115,6 +116,10 @@ Play.prototype = {
 		this.fadesprite = this.game.add.sprite(0, 0, this.fade);
 		this.fadesprite.alpha = 1;
 		this.game.add.tween(this.fadesprite).to({alpha:0}, 250, null, true);
+		
+		// JAMS
+		this.music = this.game.add.sound('coral', 0.75, true);
+		this.music.play();
 	},//
 	update: function() {
 		// collect gems
@@ -244,7 +249,7 @@ Play.prototype = {
 			{
 				if(chanceRoll(this.game, ROCK_WEIGHT)){
 					var newRock;
-					do {
+					do { // try to prevent overlapping rocks, kinda
 						newRock = new Rock(this.game, this.game.rnd.integerInRange(0, 64*5), this.game.rnd.integerInRange(this.nextChunkY, this.nextChunkY+64*8));
 					} while (this.game.physics.arcade.overlap(newRock, this.rocks));
 					

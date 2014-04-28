@@ -98,6 +98,10 @@ Menu.prototype = {
 	this.fadesprite = this.game.add.sprite(0, 0, this.fade);
 	this.fadesprite.alpha = 0;
 	this.fading = false;
+	
+	// JAMS
+	this.music = this.game.add.sound('double', 0.75, true);
+	this.music.play();
   },
   render: function() {
 	//this.game.debug.text('X POS: ' + this.bun.x, 8, 16);
@@ -148,8 +152,17 @@ Menu.prototype = {
 		this.game.add.tween(this.fadesprite).to({alpha:1}, 250, null, true);
 	}
 	
+	if (this.fading && this.music.volume > 0)
+	{
+		//this.music.play('', 0, this.music.volume - 1/250, true, false);
+		this.music.volume -= 0.05;
+	} else if (this.fading && this.music.volume !== 0) {
+		this.music.volume = 0;
+	}
+	
 	if (this.fadesprite.alpha === 1)
 	{
+		this.music.stop();
 		this.game.state.start('play');
 	}
 	

@@ -51,6 +51,10 @@ Preload.prototype = {
 	this.load.spritesheet('rocks-lg', 'assets/rocks_lg.png', 58, 56);
 	this.load.spritesheet('lava', 'assets/lava.png', 32, 32);
 	this.load.image('carrot', 'assets/carrot.png');
+	this.load.image('gauge', 'assets/gauge.png');
+	this.load.image('needle', 'assets/gauge_needle.png');
+	this.load.audio('double', 'assets/double_track.mp3', true);
+	this.load.audio('coral', 'assets/coral_reef.mp3', true);
   },
   create: function() {
     this.asset.cropEnabled = false;
