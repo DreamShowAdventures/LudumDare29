@@ -88,19 +88,27 @@ Menu.prototype = {
 	this.ground.scale.x = 2;
 	this.ground.scale.y = 2;
 	
-	this.title = this.game.add.text(8,8,'Chacket\nValleyparker:', {fill : 'red', font: '18pt "Press Start 2P"', align: 'center'});
+	this.title = this.game.add.text(8,8,'Chacket\nValleyparker:', {fill : 'red'});
+	this.title.font = "Press Start 2P";
+	this.title.fontSize = 24;
+	this.title.align = 'center';
+	
+	this.sub = this.game.add.text(4, 64, str_sub+"\n ");
+	this.sub.font = "Press Start 2P";
 	
 	if (small) {
-		this.sub = this.game.add.text(4,64,str_sub+"\n ", {font: '18pt "Press Start 2P"', align: 'center'});
+		this.sub.fontSize = 18;
 	} else {
-		this.sub = this.game.add.text(4,64,str_sub+"\n ", {font: '48pt "Press Start 2P"', align: 'center'});
+		this.sub.fontSize = 64;
 	}
 	
 	this.sub.x = (this.game.width - this.sub.width) / 2;
 	
 	if (language === 'en') this.sub.x = 4; //i dunno this is kinda nuts but it works so whatevs
 	
-	this.press = this.game.add.text(0,this.game.height - 32,str_prs, {font: '12pt "Press Start 2P"', align: 'center'});
+	this.press = this.game.add.text(0, this.game.height - 32, str_prs);
+	this.press.font = "Press Start 2P";
+	this.press.fontSize = 24;
 	this.press.x = (this.game.width - this.press.width) / 2;
 	
 	this.game.add.tween(this.title).to({y:this.title.y + 16}, 2000, Phaser.Easing.Quadratic.InOut, true, 0, Number.MAX_VALUE, true);

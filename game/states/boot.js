@@ -1,17 +1,15 @@
-
 'use strict';
 
-function Boot() {
-}
+function Boot() {}
 
 Boot.prototype = {
-  preload: function() {
-    this.load.image('preloader', 'assets/preloader.png');
-  },
-  create: function() {
-    this.game.input.maxPointers = 1;
-    this.game.state.start('preload');
-  }
+	preload: function() {
+		this.load.image('preloader', 'assets/preloader.png');
+	},
+	create: function() {
+		this.game.input.maxPointers = 1;
+		this.game.state.start('preload');
+	}
 };
 
 module.exports = Boot;

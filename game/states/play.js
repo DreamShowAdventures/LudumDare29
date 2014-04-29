@@ -150,10 +150,14 @@ Play.prototype = {
 		this.heatgauge = new Gauge(this.game, this.game.width - 48, this.game.height - 48, 'gauge'); // adds itself to the game
 		this.powergauge = new Gauge(this.game, 48, this.game.height - 48, 'gauge-drill'); // same
 		
-		this.depthtext = this.game.add.text(96,this.game.height - 48,'0m', {fill: 'white', font: '12pt "Press Start 2P"'});
+		this.depthtext = this.game.add.text(96,this.game.height - 48,'0m', {fill: 'white'});
+		this.depthtext.font = "Press Start 2P";
+		this.depthtext.fontSize = 18;
 		this.depthtext.fixedToCamera = true;
 		
-		this.cashtext = this.game.add.text(96,this.game.height - 24,'$0', {fill: 'white', font: '12pt "Press Start 2P"'});
+		this.cashtext = this.game.add.text(96,this.game.height - 24,'$0', {fill: 'white'});
+		this.cashtext.font = "Press Start 2P";
+		this.cashtext.fontSize = 18;
 		this.cashtext.fixedToCamera = true;
 	},//
 	update: function() {
@@ -266,16 +270,24 @@ Play.prototype = {
 				this.game.add.tween(this.depthtext).to({alpha:0}, 500, null, true);
 				this.game.add.tween(this.cashtext).to({alpha:0}, 500, null, true);
 				
-				this.gameover = this.game.add.text(32, 160,'GAME\nOVER', {fill: 'red', font: '48pt "Press Start 2P"'});
+				this.gameover = this.game.add.text(32, 160,'GAME\nOVER', {fill: 'red'});
+				this.gameover.font = "Press Start 2P";
+				this.gameover.fontSize = 64;
 				this.gameover.fixedToCamera = true;
 				
-				this.depthyo = this.game.add.text(32, 286, 'DEPTH ' + this.depthtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.depthyo = this.game.add.text(32, 286, 'DEPTH ' + this.depthtext.text, {fill: 'white'});
+				this.depthyo.font = "Press Start 2P";
+				this.depthyo.fontSize = 16;
 				this.depthyo.fixedToCamera = true;
 				
-				this.cashyo = this.game.add.text(32, 304, 'CASH ' + this.cashtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.cashyo = this.game.add.text(32, 304, 'CASH ' + this.cashtext.text, {fill: 'white'});
+				this.cashyo.font = "Press Start 2P";
+				this.cashyo.fontSize = 16;
 				this.cashyo.fixedToCamera = true;
 				
-				this.pressspace = this.game.add.text(8, 340, 'F5 TO RETRY\n\nTHANKS FOR PLAYING!\nA GAME BY DREAM\nSHOW ADVENTURES\nFOR LUDUM DARE 29\n\nCODE: STEVE RICHEY\nART: ANDREW AGULTO', {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.pressspace = this.game.add.text(8, 340, 'F5 TO RETRY\n\nTHANKS FOR PLAYING!\nA GAME BY DREAM\nSHOW ADVENTURES\nFOR LUDUM DARE 29\n\nCODE: STEVE RICHEY\nART: ANDREW AGULTO', {fill: 'white'});
+				this.pressspace.font = "Press Start 2P";
+				this.pressspace.fontSize = 16;
 				this.pressspace.fixedToCamera = true;
 				
 				this.deathtunes = this.game.add.sound('gameover', 0.2);
