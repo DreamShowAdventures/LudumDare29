@@ -266,16 +266,16 @@ Play.prototype = {
 				this.game.add.tween(this.depthtext).to({alpha:0}, 500, null, true);
 				this.game.add.tween(this.cashtext).to({alpha:0}, 500, null, true);
 				
-				this.gameover = this.game.add.text(32, 192,'GAME\nOVER', {fill: 'red', font: '48pt "Press Start 2P"'});
+				this.gameover = this.game.add.text(32, 160,'GAME\nOVER', {fill: 'red', font: '48pt "Press Start 2P"'});
 				this.gameover.fixedToCamera = true;
 				
-				this.depthyo = this.game.add.text(32, 318, 'DEPTH ' + this.depthtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.depthyo = this.game.add.text(32, 286, 'DEPTH ' + this.depthtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
 				this.depthyo.fixedToCamera = true;
 				
-				this.cashyo = this.game.add.text(32, 336, 'CASH ' + this.cashtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.cashyo = this.game.add.text(32, 304, 'CASH ' + this.cashtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
 				this.cashyo.fixedToCamera = true;
 				
-				this.pressspace = this.game.add.text(32, 400, 'F5 TO RETRY', {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.pressspace = this.game.add.text(8, 340, 'F5 TO RETRY\n\nTHANKS FOR PLAYING!\nA GAME BY DREAM\nSHOW ADVENTURES\nFOR LUDUM DARE 29\n\nCODE: STEVE RICHEY\nART: ANDREW AGULTO', {fill: 'white', font: '12pt "Press Start 2P"'});
 				this.pressspace.fixedToCamera = true;
 				
 				this.deathtunes = this.game.add.sound('gameover', 0.2);

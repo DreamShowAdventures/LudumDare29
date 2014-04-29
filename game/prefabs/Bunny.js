@@ -49,6 +49,7 @@ var Bunny = function(game, x, y, frame) {
 	this.slowed = false;
 	this.dead = false;
 	this.boost = 0;
+	this.boosting = false;
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -96,14 +97,19 @@ Bunny.prototype.update = function() {
 			this.animations.play('drill');
 			this.body.velocity.y = NORMAL_SPEED;
 		}
-	} else if (!this.slowed && this.game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR) && this.boost > 0) {
+		
+		this.boosting = false;
+	} else if (this.game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR) && this.boost > 0) {
 		this.body.velocity.y = BOOST_SPEED;
 		this.boost -= BOOST_DRAIN;
+		this.boosting = true;
 	} else if (this.slowed) {
 		this.body.velocity.y = SLOW_SPEED;
 		this.slowed = false;
+		this.boosting = false;
 	} else {
 		this.body.velocity.y = NORMAL_SPEED;
+		this.boosting = false;
 	}
 	
 	if (this.x < 0) this.x = 0;
@@ -119,7 +125,7 @@ Bunny.prototype.powerup = function() {
 Bunny.prototype.hitRock = function(damage) {
 	this.slowed = true;
 	
-	if (!this.powertimer > 0) {
+	if (!this.powertimer > 0 && !this.boosting) {
 		this.health -= damage;
 	}
 };
