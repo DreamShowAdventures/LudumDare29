@@ -43,12 +43,15 @@ var Bunny = function(game, x, y, frame) {
 	this.controllable = true;
 	// whether or not a rock is slowing us down
 	this.slowed = false;
+	this.dead = false;
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
 Bunny.prototype.constructor = Bunny;
 
 Bunny.prototype.update = function() {
+	if (this.dead) return;
+	
 	this.body.velocity.x = 0;
 	
 	if (this.cursors.left.isDown && this.controllable) {
@@ -123,6 +126,15 @@ Bunny.prototype.updateSpeed = function(amount) {
 
 Bunny.prototype.maxHealth = function() {
 	return INITIAL_HEALTH;
+};
+
+Bunny.prototype.playDead = function() {
+	this.body.velocity.x = 0;
+	this.body.velocity.y = 0;
+	this.body.angularVelocity = 0;
+	this.controllable = false;
+	this.animations.play('overheat');
+	this.dead = true;
 };
 
 module.exports = Bunny;

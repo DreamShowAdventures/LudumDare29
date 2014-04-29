@@ -125,6 +125,8 @@ Menu.prototype = {
 	this.music = this.game.add.sound('double', 0.75, false);
 	this.music.play();
 	this.soundjump = this.game.add.sound('jump', 0.3, false);
+	this.wind = this.game.add.sound('wind', 1, true);
+	this.music.onStop.add(function(){this.wind.play();}, this);
   },
   render: function() {
 	//this.game.debug.text('X POS: ' + this.bun.x, 8, 16);
@@ -189,7 +191,9 @@ Menu.prototype = {
 	
 	if (this.fadesprite.alpha === 1)
 	{
+		this.music.onStop.removeAll();
 		this.music.stop();
+		this.wind.stop();
 		this.game.state.start('play');
 	}
 	

@@ -28,7 +28,7 @@ function Preload() {
 
 Preload.prototype = {
   preload: function() {
-    this.asset = this.add.sprite(0,0, 'preloader');
+    this.asset = this.add.sprite(60,0, 'preloader');
     this.asset.anchor.setTo(0, 0.5);
 	//this.asset.x = this.game.width / 2;
 	this.asset.y = this.game.height / 2;
@@ -56,6 +56,8 @@ Preload.prototype = {
 	this.load.image('apple', 'assets/apple.png');
 	this.load.image('eaten', 'assets/eaten.png');
 	this.load.image('needle', 'assets/gauge_needle.png');
+	this.load.image('circle', 'assets/circle.png');
+	
 	this.load.audio('double', 'assets/double_track.ogg', true);
 	this.load.audio('coral', 'assets/coral_reef.ogg', true);
 	this.load.audio('carrot', 'assets/carrot.ogg', true);
@@ -63,6 +65,9 @@ Preload.prototype = {
 	this.load.audio('ouch', 'assets/ouch.ogg', true);
 	this.load.audio('jump', 'assets/jump.ogg', true);
 	this.load.audio('beep', 'assets/beep.ogg', true);
+	this.load.audio('wind', 'assets/wind.ogg', true);
+	this.load.audio('gameover', 'assets/gameover.ogg', true);
+	this.load.audio('boom', 'assets/boom.ogg', true);
   },
   create: function() {
     this.asset.cropEnabled = false;

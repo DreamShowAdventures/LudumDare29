@@ -91,6 +91,20 @@ Play.prototype = {
 		this.tunnelborder.gravity = 0;
 		this.tunnelborder.start(false, 2000, 15);
 		
+		// death fx
+		this.deathfade = this.game.add.bitmapData(this.game.width, this.game.height);
+		this.deathfade.context.fillStyle = '#000000';
+		this.deathfade.context.fillRect(0, 0, this.game.width, this.game.height);
+		this.deathfadesprite = this.game.add.sprite(0, 0, this.deathfade);
+		this.deathfadesprite.fixedToCamera = true;
+		this.deathfadesprite.alpha = 0;
+		this.deathfadesprite.kill();
+		
+		this.circle = this.game.add.sprite(0,0,'circle');
+		this.circle.alpha = 0.5;
+		this.circle.anchor.setTo(0.5,0.5);
+		this.circle.kill();
+		
 		// create the player
 		this.bunny = new Bunny(this.game, 0, 0);
 		this.bunny.x = this.game.width / 2;
@@ -224,24 +238,54 @@ Play.prototype = {
 			this.cashtext.text = "$" + this.cash;
 			
 			if (this.bunny.health < 0) {
-				this.dead();
+				this.dead = true;
+				this.bunny.playDead();
+				this.deathfadesprite.revive();
+				//this.deathfadesprite.x = this.game.camera.x;
+				//this.deathfadesprite.y = this.game.camera.y;
+				this.circle.x = this.bunny.x;
+				this.circle.y = this.bunny.y;
+				this.circle.revive();
+				this.game.add.tween(this.deathfadesprite).to({alpha:1}, 500, null, true);
+				this.game.add.tween(this.circle).to({alpha:0}, 500, null, true);
+				this.game.add.tween(this.circle.scale).to({x:16}, 250, null, true);
+				this.game.add.tween(this.circle.scale).to({y:16}, 500, null, true);
+				this.drilldirt.kill();
+				this.dirtEmitter.kill();
+				this.soundbeep.stop();
+				this.music.stop();
+				this.game.add.tween(this.heatgauge).to({alpha:0}, 500, null, true);
+				this.game.add.tween(this.powergauge).to({alpha:0}, 500, null, true);
+				this.game.add.tween(this.heatgauge.needle).to({alpha:0}, 500, null, true);
+				this.game.add.tween(this.powergauge.needle).to({alpha:0}, 500, null, true);
+				this.game.add.tween(this.depthtext).to({alpha:0}, 500, null, true);
+				this.game.add.tween(this.cashtext).to({alpha:0}, 500, null, true);
+				
+				this.gameover = this.game.add.text(32, 192,'GAME\nOVER', {fill: 'red', font: '48pt "Press Start 2P"'});
+				this.gameover.fixedToCamera = true;
+				
+				this.depthyo = this.game.add.text(32, 318, 'DEPTH ' + this.depthtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.depthyo.fixedToCamera = true;
+				
+				this.cashyo = this.game.add.text(32, 336, 'CASH ' + this.cashtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.cashyo.fixedToCamera = true;
+				
+				this.pressspace = this.game.add.text(32, 400, 'PRESS SPACE\nTO RETRY', {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.pressspace.fixedToCamera = true;
+				
+				this.deathtunes = this.game.add.sound('gameover', 0.2);
+				this.deathtunes.play('', 0, 0.2);
+				
+				this.boom = this.game.add.sound('boom');
+				this.boom.play();
+			}
+		} else {
+			if(this.game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
+			{
+				this.deathtunes.stop();
+				this.game.state.start('menu');
 			}
 		}
-	},
-	render: function() {
-		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
-		//this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
-		//this.game.debug.text('CASH: $' + this.cash, 8, 32);
-		//this.game.debug.text('HEAT: ' + Math.round(this.bunny.health), 8, 48);
-		//this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 8, this.game.height - 12, 'rgb(0,0,0)');
-		//this.game.debug.body(this.bunny);
-		//this.game.debug.bodyInfo(this.bunny, 16, 32);
-		//this.game.debug.body(this.bunny);
-		//var i = 0;
-		//for (var i = 0; i < this.gems.length; i++) this.game.debug.body(this.gems.children[i]);
-		//for (i = 0; i < this.carrots.length; i++) this.game.debug.body(this.carrots.children[i]);
-		//for (i = 0; i < this.rocks.length; i++) this.game.debug.body(this.rocks.children[i]);
-		//for (i = 0; i < this.tephra.length; i++) this.game.debug.body(this.tephra.children[i]);
 	},
 	generateChunk: function() {
 		var newChunk = this.chunkGroup.add(this.game.add.group());
