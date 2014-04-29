@@ -122,7 +122,7 @@ Menu.prototype = {
 	this.fading = false;
 	
 	// JAMS
-	this.music = this.game.add.sound('double', 0.75, true);
+	this.music = this.game.add.sound('double', 0.75, false);
 	this.music.play();
 	this.soundjump = this.game.add.sound('jump', 0.3, false);
   },

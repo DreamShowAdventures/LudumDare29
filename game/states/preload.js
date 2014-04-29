@@ -52,6 +52,7 @@ Preload.prototype = {
 	this.load.spritesheet('lava', 'assets/lava.png', 32, 32);
 	this.load.image('carrot', 'assets/carrot.png');
 	this.load.image('gauge', 'assets/gauge.png');
+	this.load.image('gauge-drill', 'assets/gauge_DRILL.png');
 	this.load.image('apple', 'assets/apple.png');
 	this.load.image('eaten', 'assets/eaten.png');
 	this.load.image('needle', 'assets/gauge_needle.png');
@@ -61,6 +62,7 @@ Preload.prototype = {
 	this.load.audio('gem', 'assets/gem.ogg', true);
 	this.load.audio('ouch', 'assets/ouch.ogg', true);
 	this.load.audio('jump', 'assets/jump.ogg', true);
+	this.load.audio('beep', 'assets/beep.ogg', true);
   },
   create: function() {
     this.asset.cropEnabled = false;

@@ -120,89 +120,119 @@ Play.prototype = {
 		// dead flag
 		this.dead = false;
 		
+		// almost dead flag
+		this.beeping = false;
+		
 		// JAMS
 		this.music = this.game.add.sound('coral', 0.75, true);
 		this.music.play();
 		this.soundcarrot = this.game.add.sound('carrot');
 		this.soundgem = this.game.add.sound('gem');
 		this.soundouch = this.game.add.sound('ouch');
+		this.soundbeep = this.game.add.sound('beep');
 		
 		// HUD
 		this.heatgauge = new Gauge(this.game, this.game.width - 48, this.game.height - 48, 'gauge'); // adds itself to the game
+		this.powergauge = new Gauge(this.game, 48, this.game.height - 48, 'gauge-drill'); // same
+		
+		this.depthtext = this.game.add.text(96,this.game.height - 48,'0m', {fill: 'white', font: '12pt "Press Start 2P"'});
+		this.depthtext.fixedToCamera = true;
+		
+		this.cashtext = this.game.add.text(96,this.game.height - 24,'$0', {fill: 'white', font: '12pt "Press Start 2P"'});
+		this.cashtext.fixedToCamera = true;
 	},//
 	update: function() {
-		// collect gems
-		this.game.physics.arcade.overlap(this.bunny, this.gems, this.collectGems, null, this);
-		
-		// collect carrots
-		this.game.physics.arcade.overlap(this.bunny, this.carrots, this.collectCarrot, null, this);
-		
-		// rocks
-		this.game.physics.arcade.overlap(this.bunny, this.rocks, this.hitRock, null, this);
-		
-		// lava
-		this.game.physics.arcade.overlap(this.bunny, this.tephra, this.hitLava, null, this);
-		
-		// generate a new chunk if we're about to run out
-		
-		if (this.bunny.y > this.chunkGroup.children[this.chunkGroup.children.length - 1].y)
-		{
-			this.generateChunk();
-		}
-		
-		// garbage collect old chunks
-		
-		var i = this.chunkGroup.children.length;
-		
-		while (i >= 0)
-		{
-			if (this.chunkGroup.children[i])
+		if (!this.dead) {
+			// collect gems
+			this.game.physics.arcade.overlap(this.bunny, this.gems, this.collectGems, null, this);
+			
+			// collect carrots
+			this.game.physics.arcade.overlap(this.bunny, this.carrots, this.collectCarrot, null, this);
+			
+			// rocks
+			this.game.physics.arcade.overlap(this.bunny, this.rocks, this.hitRock, null, this);
+			
+			// lava
+			this.game.physics.arcade.overlap(this.bunny, this.tephra, this.hitLava, null, this);
+			
+			// generate a new chunk if we're about to run out
+			
+			if (this.bunny.y > this.chunkGroup.children[this.chunkGroup.children.length - 1].y)
 			{
-				if (this.chunkGroup.children[i].y < this.game.camera.y - 8 * 64)
-				{
-					this.chunkGroup.remove(this.chunkGroup.children[i], false);
-				}
+				this.generateChunk();
 			}
 			
-			i--;
+			// garbage collect old chunks
+			
+			var i = this.chunkGroup.children.length;
+			
+			while (i >= 0)
+			{
+				if (this.chunkGroup.children[i])
+				{
+					if (this.chunkGroup.children[i].y < this.game.camera.y - 8 * 64)
+					{
+						this.chunkGroup.remove(this.chunkGroup.children[i], false);
+					}
+				}
+				
+				i--;
+			}
+			
+			// update dirt particle position
+			
+			this.dirtEmitter.emitX = this.bunny.x;
+			this.dirtEmitter.emitY = this.bunny.y + 24;
+			
+			// update drill dirt effect position/angle
+			
+			this.drilldirt.x = this.bunny.x;
+			this.drilldirt.y = this.bunny.y;
+			this.drilldirt.angle = this.bunny.angle;
+			
+			// update tunnel position/angle
+			
+			this.tunnel.emitX = this.bunny.x;
+			this.tunnel.emitY = this.bunny.y;
+			this.tunnel.setRotation(this.bunny.angle, this.bunny.angle);
+			
+			// update the tunnel border
+			
+			this.tunnelborder.emitX = this.game.rnd.pick(
+				[	this.bunny.x - this.bunny.width / 2 + 1, 
+					this.bunny.x - this.bunny.width / 2 + 2,
+					this.bunny.x - this.bunny.width / 2 + 3,
+					this.bunny.x + this.bunny.width / 2 - 1,
+					this.bunny.x + this.bunny.width / 2 - 2,
+					this.bunny.x + this.bunny.width / 2 - 3 ]);
+			this.tunnelborder.emitY = this.bunny.y;
+			
+			// update heat
+			this.heatgauge.updateNeedle(this.bunny.health, this.bunny.maxHealth(), 0);
+			
+			if (this.bunny.health < 30 && !this.beeping) {
+				// play beeping sound
+				if (!this.soundbeep.isPlaying) this.soundbeep.play('', 0, 0.1, true);
+				this.beeping = true;
+			} else if (this.beeping && this.bunny.health > 30) {
+				if (this.soundbeep.isPlaying) this.soundbeep.stop();
+				this.beeping = false;
+			}
+			
+			// update text
+			this.depthtext.text = this.bunny.y > 0 ? Math.round(this.bunny.y/10) + "m" : "0m";
+			this.cashtext.text = "$" + this.cash;
+			
+			if (this.bunny.health < 0) {
+				this.dead();
+			}
 		}
-		
-		// update dirt particle position
-		
-		this.dirtEmitter.emitX = this.bunny.x;
-		this.dirtEmitter.emitY = this.bunny.y + 24;
-		
-		// update drill dirt effect position/angle
-		
-		this.drilldirt.x = this.bunny.x;
-		this.drilldirt.y = this.bunny.y;
-		this.drilldirt.angle = this.bunny.angle;
-		
-		// update tunnel position/angle
-		
-		this.tunnel.emitX = this.bunny.x;
-		this.tunnel.emitY = this.bunny.y;
-		this.tunnel.setRotation(this.bunny.angle, this.bunny.angle);
-		
-		// update the tunnel border
-		
-		this.tunnelborder.emitX = this.game.rnd.pick(
-			[	this.bunny.x - this.bunny.width / 2 + 1, 
-				this.bunny.x - this.bunny.width / 2 + 2,
-				this.bunny.x - this.bunny.width / 2 + 3,
-				this.bunny.x + this.bunny.width / 2 - 1,
-				this.bunny.x + this.bunny.width / 2 - 2,
-				this.bunny.x + this.bunny.width / 2 - 3 ]);
-		this.tunnelborder.emitY = this.bunny.y;
-		
-		// update heat
-		this.heatgauge.updateNeedle(this.bunny.health, this.bunny.maxHealth(), 0);
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
-		this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
-		this.game.debug.text('CASH: $' + this.cash, 8, 32);
-		this.game.debug.text('HEAT: ' + Math.round(this.bunny.health), 8, 48);
+		//this.game.debug.text('DEPTH: ' + Math.round(this.bunny.y), 8, 16, 'rgb(255,255,255)');
+		//this.game.debug.text('CASH: $' + this.cash, 8, 32);
+		//this.game.debug.text('HEAT: ' + Math.round(this.bunny.health), 8, 48);
 		//this.game.debug.text('CHUNKS: ' + this.chunkGroup.children.length, 8, this.game.height - 12, 'rgb(0,0,0)');
 		//this.game.debug.body(this.bunny);
 		//this.game.debug.bodyInfo(this.bunny, 16, 32);
@@ -303,7 +333,7 @@ Play.prototype = {
 	collectGems: function(player, gem) {
 		this.getEmitter.emitX = gem.x;
 		this.getEmitter.emitY = gem.y;
-		this.cash += gem.frame + 1;
+		this.cash += gem.value();
 		this.gems.remove(gem, true);
 		this.getEmitter.start(true, 1000, null, 25);
 		

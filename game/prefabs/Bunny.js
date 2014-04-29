@@ -7,6 +7,9 @@ var SLOW_SPEED = 50; // speed when drilling through a rock
 var INITIAL_HEALTH = 100; // how much health the player starts with
 var REGEN_RATE = 0.1; // how quickly heat dissipates if not drilling through rock or lava
 var REGEN_MAX = 100; // the maximum amount of heat that can be regenerated
+var NORMAL_TURN = 100; // how fast you turn normally
+var POWER_TURN = 200; // how fast you turn if carroty
+var MAX_SPEED = 300; // the maximum possible speed from depth
 
 var Bunny = function(game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'drilling', frame);
@@ -49,11 +52,11 @@ Bunny.prototype.update = function() {
 	this.body.velocity.x = 0;
 	
 	if (this.cursors.left.isDown && this.controllable) {
-		this.body.velocity.x = -100;
+		this.body.velocity.x = this.powertimer > 0 ? -POWER_TURN : -NORMAL_TURN;
 	}
 	
 	if (this.cursors.right.isDown && this.controllable) {
-		this.body.velocity.x = 100;
+		this.body.velocity.x = this.powertimer > 0 ? POWER_TURN : NORMAL_TURN;
 	}
 	
 	if (this.body.velocity.x < 0 && this.angle < 22.5) {
@@ -110,6 +113,12 @@ Bunny.prototype.hitRock = function(damage) {
 
 Bunny.prototype.updateSpeed = function(amount) {
 	NORMAL_SPEED += amount;
+	
+	if (NORMAL_SPEED > MAX_SPEED) {
+		NORMAL_SPEED = MAX_SPEED;
+	} else {
+		POWER_SPEED += amount * 2;
+	}
 };
 
 Bunny.prototype.maxHealth = function() {
