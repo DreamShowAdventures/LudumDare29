@@ -52,6 +52,8 @@ Preload.prototype = {
 	this.load.spritesheet('lava', 'assets/lava.png', 32, 32);
 	this.load.image('carrot', 'assets/carrot.png');
 	this.load.image('gauge', 'assets/gauge.png');
+	this.load.image('apple', 'assets/apple.png');
+	this.load.image('eaten', 'assets/eaten.png');
 	this.load.image('needle', 'assets/gauge_needle.png');
 	this.load.audio('double', 'assets/double_track.ogg', true);
 	this.load.audio('coral', 'assets/coral_reef.ogg', true);

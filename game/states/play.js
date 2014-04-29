@@ -121,11 +121,14 @@ Play.prototype = {
 		this.dead = false;
 		
 		// JAMS
-		this.music = this.game.add.sound('coral', 0, true);
+		this.music = this.game.add.sound('coral', 0.75, true);
 		this.music.play();
 		this.soundcarrot = this.game.add.sound('carrot');
 		this.soundgem = this.game.add.sound('gem');
 		this.soundouch = this.game.add.sound('ouch');
+		
+		// HUD
+		this.heatgauge = new Gauge(this.game, this.game.width - 48, this.game.height - 48, 'gauge'); // adds itself to the game
 	},//
 	update: function() {
 		// collect gems
@@ -192,11 +195,8 @@ Play.prototype = {
 				this.bunny.x + this.bunny.width / 2 - 3 ]);
 		this.tunnelborder.emitY = this.bunny.y;
 		
-		// fade in music
-		if (this.music.volume < 0.75)
-		{
-			this.music.volume += 0.01;
-		}
+		// update heat
+		this.heatgauge.updateNeedle(this.bunny.health, this.bunny.maxHealth(), 0);
 	},
 	render: function() {
 		//this.game.debug.text('Bunny angle: ' + this.bunny.angle, 32, 32, 'rgb(0,0,0)');
@@ -297,7 +297,7 @@ Play.prototype = {
 		
 		// FASTER FASTER BUNNY
 		if (this.bunny) {
-			this.bunny.body.velocity.y += INCREASE_PER_CHUNK;
+			this.bunny.updateSpeed(INCREASE_PER_CHUNK);
 		}
 	},
 	collectGems: function(player, gem) {
