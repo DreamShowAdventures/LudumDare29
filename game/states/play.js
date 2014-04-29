@@ -13,7 +13,7 @@ var LAVA_WEIGHT = 0.1; //chance of any one lava spawning
 var INCREASE_PER_CHUNK = 1; // how much faster to go per chunk
 var LIGHT_ROCK_DAMAGE = 0.5; // how much damage a light rock does
 var DARK_ROCK_DAMAGE = 1.0; // how much damage a dark rock does
-var LAVA_DAMAGE = 1.5; // how much damage lava does, per frame
+var LAVA_DAMAGE = 2.5; // how much damage lava does, per frame
 
 // one chunk is equal to the screen size. so every time you travel one screen height, you enter a new chunk
 
