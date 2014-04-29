@@ -2,6 +2,7 @@
 
 var POWER_DURATION = 450; // how long the powerup lasts, in frames
 var NORMAL_SPEED = 100; // speed of the player, normally
+var BOOST_SPEED = 150; // speed of the player, boosting
 var POWER_SPEED = 300; // speed of the player when carroted
 var SLOW_SPEED = 50; // speed when drilling through a rock
 var INITIAL_HEALTH = 100; // how much health the player starts with
@@ -10,6 +11,9 @@ var REGEN_MAX = 100; // the maximum amount of heat that can be regenerated
 var NORMAL_TURN = 100; // how fast you turn normally
 var POWER_TURN = 200; // how fast you turn if carroty
 var MAX_SPEED = 300; // the maximum possible speed from depth
+var MAX_BOOST = 50;
+var BOOST_REGEN = 0.5;
+var BOOST_DRAIN = 0.75;
 
 var Bunny = function(game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'drilling', frame);
@@ -44,6 +48,7 @@ var Bunny = function(game, x, y, frame) {
 	// whether or not a rock is slowing us down
 	this.slowed = false;
 	this.dead = false;
+	this.boost = 0;
 };
 
 Bunny.prototype = Object.create(Phaser.Sprite.prototype);
@@ -51,6 +56,8 @@ Bunny.prototype.constructor = Bunny;
 
 Bunny.prototype.update = function() {
 	if (this.dead) return;
+	
+	if (!this.slowed && this.boost < MAX_BOOST) this.boost += BOOST_REGEN;
 	
 	this.body.velocity.x = 0;
 	
@@ -89,6 +96,9 @@ Bunny.prototype.update = function() {
 			this.animations.play('drill');
 			this.body.velocity.y = NORMAL_SPEED;
 		}
+	} else if (!this.slowed && this.game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR) && this.boost > 0) {
+		this.body.velocity.y = BOOST_SPEED;
+		this.boost -= BOOST_DRAIN;
 	} else if (this.slowed) {
 		this.body.velocity.y = SLOW_SPEED;
 		this.slowed = false;
@@ -126,6 +136,10 @@ Bunny.prototype.updateSpeed = function(amount) {
 
 Bunny.prototype.maxHealth = function() {
 	return INITIAL_HEALTH;
+};
+
+Bunny.prototype.maxBoost = function() {
+	return MAX_BOOST;
 };
 
 Bunny.prototype.playDead = function() {

@@ -42,6 +42,7 @@ Play.prototype = {
 		
 		this.chunkGroup = this.game.add.group();
 		this.nextChunkY = 0;
+		this.game.world.bounds.x = 0;
 		this.game.world.bounds.height = 1024;
 		this.game.camera.setBoundsToWorld();
 		this.lastChunkIndex = 0;
@@ -224,6 +225,10 @@ Play.prototype = {
 			// update heat
 			this.heatgauge.updateNeedle(this.bunny.health, this.bunny.maxHealth(), 0);
 			
+			// update booost
+			
+			this.powergauge.updateNeedle(this.bunny.boost, 0, this.bunny.maxBoost());
+			
 			if (this.bunny.health < 30 && !this.beeping) {
 				// play beeping sound
 				if (!this.soundbeep.isPlaying) this.soundbeep.play('', 0, 0.1, true);
@@ -270,21 +275,22 @@ Play.prototype = {
 				this.cashyo = this.game.add.text(32, 336, 'CASH ' + this.cashtext.text, {fill: 'white', font: '12pt "Press Start 2P"'});
 				this.cashyo.fixedToCamera = true;
 				
-				this.pressspace = this.game.add.text(32, 400, 'PRESS SPACE\nTO RETRY', {fill: 'white', font: '12pt "Press Start 2P"'});
+				this.pressspace = this.game.add.text(32, 400, 'F5 TO RETRY', {fill: 'white', font: '12pt "Press Start 2P"'});
 				this.pressspace.fixedToCamera = true;
 				
 				this.deathtunes = this.game.add.sound('gameover', 0.2);
-				this.deathtunes.play('', 0, 0.2);
+				//this.deathtunes.play('', 0, 0.2);
 				
 				this.boom = this.game.add.sound('boom');
+				this.boom.onStop.add(function(){this.deathtunes.play('', 0, 0.2);}, this);
 				this.boom.play();
 			}
 		} else {
-			if(this.game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
-			{
-				this.deathtunes.stop();
-				this.game.state.start('menu');
-			}
+			//if(this.game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
+			//{
+			//	this.deathtunes.stop();
+			//	this.game.state.start('menu');
+			//}
 		}
 	},
 	generateChunk: function() {
