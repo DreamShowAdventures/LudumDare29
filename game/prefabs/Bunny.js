@@ -62,11 +62,11 @@ Bunny.prototype.update = function() {
 	
 	this.body.velocity.x = 0;
 	
-	if ((this.cursors.left.isDown || (this.game.input.pointer1.isDown && this.game.input.point1.screenX < this.game.width / 2)) && this.controllable) {
+	if ((this.cursors.left.isDown || (this.game.input.pointer1.isDown && this.game.input.pointer1.screenX < this.game.width / 2)) && this.controllable) {
 		this.body.velocity.x = this.powertimer > 0 ? -POWER_TURN : -NORMAL_TURN;
 	}
 	
-	if ((this.cursors.right.isDown || (this.game.input.pointer1.isDown && this.game.input.point1.screenX >= this.game.width / 2)) && this.controllable) {
+	if ((this.cursors.right.isDown || (this.game.input.pointer1.isDown && this.game.input.pointer1.screenX >= this.game.width / 2)) && this.controllable) {
 		this.body.velocity.x = this.powertimer > 0 ? POWER_TURN : NORMAL_TURN;
 	}
 	
