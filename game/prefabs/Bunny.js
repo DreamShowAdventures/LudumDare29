@@ -16,7 +16,7 @@ var BOOST_REGEN = 0.5;
 var BOOST_DRAIN = 0.75;
 
 var Bunny = function(game, x, y, frame) {
-	Phaser.Sprite.call(this, game, x, y, 'drilling', frame);
+	Phaser.Sprite.call(this, game, x, y, 'images', frame);
 	// scale up!
 	this.smoothed = false;
 	this.scale.x = 2;
@@ -32,10 +32,10 @@ var Bunny = function(game, x, y, frame) {
 	// wiggle wiggle
 	this.baseY = this.y;
 	// animate
-	this.animations.add('drill', [0, 1, 2], 12, true);
-	this.animations.add('power', [3, 4, 5], 24, true);
-	this.animations.add('crack', [6, 7, 8], 2, false);
-	this.animations.add('overheat', [9, 10, 11, 12], 2, false);
+	this.animations.add('drill', Phaser.Animation.generateFrameNames('drilling', 0, 2, '.png', 4), 12, true);
+	this.animations.add('power', Phaser.Animation.generateFrameNames('drilling', 3, 5, '.png', 4), 24, true);
+	//this.animations.add('crack', [6, 7, 8], 2, false);
+	this.animations.add('overheat', Phaser.Animation.generateFrameNames('drilling', 6, 9, '.png', 4), 2, false);
 	this.animations.play('drill');
 	// POWER UP
 	this.powertimer = 0;
@@ -62,11 +62,11 @@ Bunny.prototype.update = function() {
 	
 	this.body.velocity.x = 0;
 	
-	if (this.cursors.left.isDown && this.controllable) {
+	if ((this.cursors.left.isDown || (this.game.input.pointer1.isDown && this.game.input.point1.screenX < this.game.width / 2)) && this.controllable) {
 		this.body.velocity.x = this.powertimer > 0 ? -POWER_TURN : -NORMAL_TURN;
 	}
 	
-	if (this.cursors.right.isDown && this.controllable) {
+	if ((this.cursors.right.isDown || (this.game.input.pointer1.isDown && this.game.input.point1.screenX >= this.game.width / 2)) && this.controllable) {
 		this.body.velocity.x = this.powertimer > 0 ? POWER_TURN : NORMAL_TURN;
 	}
 	

@@ -6,7 +6,11 @@
 var GEM_VALUES = [1,2,3,4,5,6,7,8,9,10];
 
 var Gem = function(game, x, y, frame) {
-	Phaser.Sprite.call(this, game, x, y, 'gems', game.rnd.integerInRange(0,9));
+	Phaser.Sprite.call(this, game, x, y, 'images');
+	
+	this.gemValue = this.game.rnd.integerInRange(0,9);
+	this.frameName = "gems000" + this.gemValue + ".png";
+	
 	
 	// scale up!
 	this.smoothed = false;
@@ -27,14 +31,8 @@ var Gem = function(game, x, y, frame) {
 Gem.prototype = Object.create(Phaser.Sprite.prototype);
 Gem.prototype.constructor = Gem;
 
-Gem.prototype.update = function() {
-  
-  // write your prefab's specific update code here
-  
-};
-
 Gem.prototype.value = function() {
-	return GEM_VALUES[this.frame];
+	return GEM_VALUES[this.gemValue];
 }
 
 module.exports = Gem;

@@ -1,7 +1,8 @@
 'use strict';
 
 var Gauge = function(game, x, y, key) {
-	Phaser.Sprite.call(this, game, x, y, key, 0);
+	Phaser.Sprite.call(this, game, x, y, 'images');
+	this.frameName = key;
 	// scale up!
 	this.smoothed = false;
 	this.scale.x = this.scale.y = 2;
@@ -11,7 +12,8 @@ var Gauge = function(game, x, y, key) {
 	
 	game.add.existing(this);
 	
-	this.needle = game.add.sprite(x, y, 'needle');
+	this.needle = game.add.sprite(x, y, 'images');
+	this.needle.frameName = "gauge_needle.png";
 	// scale up!
 	this.needle.smoothed = false;
 	this.needle.scale.x = this.needle.scale.y = 2;

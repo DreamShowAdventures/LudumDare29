@@ -58,25 +58,25 @@ Play.prototype = {
 		// create the dirt emitter
 		
 		this.dirtEmitter = this.game.add.emitter(32, 64, 500);
-		this.dirtEmitter.makeParticles('particles-dirt', [0,1,2,3], 500, false, false);
+		this.dirtEmitter.makeParticles('images', [40,41,42,43], 500, false, false);
 		this.dirtEmitter.setYSpeed(-5, 200);
 		this.dirtEmitter.setRotation(0, 0);
 		this.dirtEmitter.start(false, 500, 25);
 		
 		// create the dirt effect
 		
-		this.drilldirt = this.game.add.sprite(32, 64, 'drilldirt');
+		this.drilldirt = this.game.add.sprite(32, 64, 'images');
 		this.drilldirt.smoothed = false;
 		this.drilldirt.scale.x = 2;
 		this.drilldirt.scale.y = 2;
 		this.drilldirt.anchor.setTo(0.5, -0.1);
-		this.drilldirt.animations.add('drill', [0,1,2], 16, true);
+		this.drilldirt.animations.add('drill', Phaser.Animation.generateFrameNames('drilldirt', 0, 1, '.png', 4), 16, true);
 		this.drilldirt.animations.play('drill');
 		
 		// create the tunnel
 		
 		this.tunnel = this.game.add.emitter(32, 64, 100);
-		this.tunnel.makeParticles('particles-tunnel-solid', 0, 100, false, false);
+		this.tunnel.makeParticles('images', 48, 100, false, false);
 		this.tunnel.setXSpeed(0,0);
 		this.tunnel.setYSpeed(0,0);
 		this.tunnel.gravity = 0;
@@ -85,7 +85,7 @@ Play.prototype = {
 		// create the tunnel border
 		
 		this.tunnelborder = this.game.add.emitter(32, 64, 200);
-		this.tunnelborder.makeParticles('particles-tunnel', [0,1,2], 200, false, false);
+		this.tunnelborder.makeParticles('images', [45,46,47], 200, false, false);
 		this.tunnelborder.setXSpeed(0, 0);
 		this.tunnelborder.setYSpeed(0, 0);
 		this.tunnelborder.setRotation(0, 0);
@@ -101,7 +101,8 @@ Play.prototype = {
 		this.deathfadesprite.alpha = 0;
 		this.deathfadesprite.kill();
 		
-		this.circle = this.game.add.sprite(0,0,'circle');
+		this.circle = this.game.add.sprite(0,0,'images');
+		this.circle.frameName = 'circle.png';
 		this.circle.alpha = 0.5;
 		this.circle.anchor.setTo(0.5,0.5);
 		this.circle.kill();
@@ -114,7 +115,8 @@ Play.prototype = {
 		
 		// pickup effect
 		this.getEmitter = this.game.add.emitter();
-		this.getEmitter.makeParticles('particles-get');
+		
+		this.getEmitter.makeParticles('images', 44);
 		this.getEmitter.gravity = 0;
 		this.getEmitter.setAlpha(0, 1);
 		this.getEmitter.setXSpeed(-25, 25);
@@ -139,16 +141,21 @@ Play.prototype = {
 		this.beeping = false;
 		
 		// JAMS
-		this.music = this.game.add.sound('coral', 0.75, true);
-		this.music.play();
-		this.soundcarrot = this.game.add.sound('carrot');
-		this.soundgem = this.game.add.sound('gem');
-		this.soundouch = this.game.add.sound('ouch');
-		this.soundbeep = this.game.add.sound('beep');
+		
+		this.sfx = this.game.sound.add('atlas');
+		this.sfx.addMarker('coral', 2.083, 267.840, 1, true);
+		this.sfx.addMarker('carrot', 0.704, 0.535, 1, false);
+		this.sfx.addMarker('gem', 1.252, 0.340, 1, false);
+		this.sfx.addMarker('ouch', 1.968, 0.1, 1, false);
+		this.sfx.addMarker('beep', 0, 0.15, 1, false);
+		this.sfx.addMarker('gameover', 387.365, 67.752, true);
+		this.sfx.addMarker('boom', 0.162, 0.535, false);
+		
+		this.sfx.play('coral');
 		
 		// HUD
-		this.heatgauge = new Gauge(this.game, this.game.width - 48, this.game.height - 48, 'gauge'); // adds itself to the game
-		this.powergauge = new Gauge(this.game, 48, this.game.height - 48, 'gauge-drill'); // same
+		this.heatgauge = new Gauge(this.game, this.game.width - 48, this.game.height - 48, 'gauge.png'); // adds itself to the game
+		this.powergauge = new Gauge(this.game, 48, this.game.height - 48, 'gauge_DRILL.png'); // same
 		
 		this.depthtext = this.game.add.text(96,this.game.height - 48,'0m', {fill: 'white'});
 		this.depthtext.font = "Press Start 2P";
@@ -235,10 +242,10 @@ Play.prototype = {
 			
 			if (this.bunny.health < 30 && !this.beeping) {
 				// play beeping sound
-				if (!this.soundbeep.isPlaying) this.soundbeep.play('', 0, 0.1, true);
+				this.sfx.play('beep');
+				this.game.time.events.add(160, function(){ this.beeping = false; }, this);
 				this.beeping = true;
 			} else if (this.beeping && this.bunny.health > 30) {
-				if (this.soundbeep.isPlaying) this.soundbeep.stop();
 				this.beeping = false;
 			}
 			
@@ -250,8 +257,6 @@ Play.prototype = {
 				this.dead = true;
 				this.bunny.playDead();
 				this.deathfadesprite.revive();
-				//this.deathfadesprite.x = this.game.camera.x;
-				//this.deathfadesprite.y = this.game.camera.y;
 				this.circle.x = this.bunny.x;
 				this.circle.y = this.bunny.y;
 				this.circle.revive();
@@ -261,8 +266,6 @@ Play.prototype = {
 				this.game.add.tween(this.circle.scale).to({y:16}, 500, null, true);
 				this.drilldirt.kill();
 				this.dirtEmitter.kill();
-				this.soundbeep.stop();
-				this.music.stop();
 				this.game.add.tween(this.heatgauge).to({alpha:0}, 500, null, true);
 				this.game.add.tween(this.powergauge).to({alpha:0}, 500, null, true);
 				this.game.add.tween(this.heatgauge.needle).to({alpha:0}, 500, null, true);
@@ -290,19 +293,16 @@ Play.prototype = {
 				this.pressspace.fontSize = 16;
 				this.pressspace.fixedToCamera = true;
 				
-				this.deathtunes = this.game.add.sound('gameover', 0.2);
-				//this.deathtunes.play('', 0, 0.2);
+				this.sfx.volume = 0;
+				this.game.sound.remove(this.sfx);
 				
-				this.boom = this.game.add.sound('boom');
-				this.boom.onStop.add(function(){this.deathtunes.play('', 0, 0.2);}, this);
-				this.boom.play();
+				this.dfx = this.game.sound.add('atlas');
+				this.dfx.volume = 1;
+				this.dfx.addMarker('boom', 0.162, 0.535, true);
+				this.dfx.addMarker('gameover', 387.365, 67.752, true);
+				this.dfx.play('boom');
+				this.game.time.events.add(545, function(){this.dfx.play('gameover');}, this);
 			}
-		} else {
-			//if(this.game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
-			//{
-			//	this.deathtunes.stop();
-			//	this.game.state.start('menu');
-			//}
 		}
 	},
 	generateChunk: function() {
@@ -399,7 +399,7 @@ Play.prototype = {
 		this.gems.remove(gem, true);
 		this.getEmitter.start(true, 1000, null, 25);
 		
-		this.soundgem.play();
+		this.sfx.play('gem');
 	},
 	collectCarrot: function(player, carrot) {
 		this.getEmitter.emitX = carrot.x;
@@ -408,7 +408,7 @@ Play.prototype = {
 		this.getEmitter.start(true, 1000, null, 25);
 		
 		this.bunny.powerup();
-		this.soundcarrot.play();
+		this.sfx.play('carrot');
 	},
 	hitRock: function(player, rock) {
 		if (rock.frame === 1 )
@@ -420,12 +420,11 @@ Play.prototype = {
 			this.bunny.hitRock(LIGHT_ROCK_DAMAGE);
 		}
 		
-		this.soundouch.play();
+		this.sfx.play('ouch');
 	},
 	hitLava: function(player, lava) {
 		this.bunny.hitRock(LAVA_DAMAGE);
-		
-		this.soundouch.play();
+		this.sfx.play('ouch');
 	}
 };
 

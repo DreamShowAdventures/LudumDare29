@@ -60,7 +60,6 @@ module.exports = function (grunt) {
           { expand: true, src: ['assets/**'], dest: 'dist/' },
           { expand: true, flatten: true, src: ['game/plugins/*.js'], dest: 'dist/js/plugins/' },
           { expand: true, flatten: true, src: ['bower_components/**/build/*.js'], dest: 'dist/js/' },
-          { expand: true, src: ['css/**'], dest: 'dist/' },
           { expand: true, src: ['index.html'], dest: 'dist/' }
         ]
       }
@@ -70,10 +69,22 @@ module.exports = function (grunt) {
         src: ['game/main.js'],
         dest: 'dist/js/game.js'
       }
-    }
+    },
+	uglify: {
+		options: {
+			compress: {
+				drop_console: true
+			}
+		},
+		my_target: {
+			files: {
+				'dist/js/game.min.js': ['dist/js/game.js']
+			}
+		}
+	}
   });
   
-  grunt.registerTask('build', ['buildBootstrapper', 'browserify','copy']);
+  grunt.registerTask('build', ['buildBootstrapper', 'browserify','copy','uglify']);
   grunt.registerTask('serve', ['build', 'connect:livereload', 'open', 'watch']);
   grunt.registerTask('default', ['serve']);
   grunt.registerTask('prod', ['build']);

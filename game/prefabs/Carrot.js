@@ -1,13 +1,15 @@
 'use strict';
 
 var Carrot = function(game, x, y) {
-  Phaser.Sprite.call(this, game, x, y, 'carrot', 0);
-
-  // scale up!
+	Phaser.Sprite.call(this, game, x, y, 'images');
+	
+	this.frameName = "carrot.png";
+	
+	// scale up!
 	this.smoothed = false;
 	this.scale.x = 2;
 	this.scale.y = 2;
-	//
+	
 	// center rotations
 	this.anchor.setTo(0.5, 0.5);
 	
@@ -22,11 +24,5 @@ var Carrot = function(game, x, y) {
 
 Carrot.prototype = Object.create(Phaser.Sprite.prototype);
 Carrot.prototype.constructor = Carrot;
-
-Carrot.prototype.update = function() {
-  
-  // write your prefab's specific update code here
-  
-};
 
 module.exports = Carrot;
